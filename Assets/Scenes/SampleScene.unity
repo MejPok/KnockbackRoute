@@ -3112,7 +3112,7 @@ MonoBehaviour:
   recoilImpulse: 7
   bulletSpawnDistance: 0.6
   bulletLifetime: 4
-  maxVelocity: 9
+  maxVelocity: 10
   enableVelocityBoost: 1
   velocityBoostPerShot: 0.4
   nearMaxSpeedThreshold: 0.94
