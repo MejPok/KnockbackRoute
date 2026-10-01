@@ -75,6 +75,7 @@ public class PlayerShoot : MonoBehaviour
             return;
         }
         bulletInventory.NormalBulletsCount -= 1;
+        GetComponent<ParticleHolder>().useParticle(transform.GetChild(1), 0);
 
         Vector3 spawnPosition = transform.position + (Vector3)(aimDirection * bulletSpawnDistance);
         GameObject bullet = Instantiate(bulletPrefab, spawnPosition, transform.rotation);
