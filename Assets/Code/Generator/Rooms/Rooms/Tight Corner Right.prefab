@@ -548,6 +548,7 @@ GameObject:
   - component: {fileID: 7055857293369151804}
   - component: {fileID: 8590863172449405679}
   - component: {fileID: 4720494436784598611}
+  - component: {fileID: 6137867193363796465}
   m_Layer: 0
   m_Name: Tight Corner Right
   m_TagString: Untagged
@@ -666,6 +667,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 6.7524796, y: 13.201056}
   m_EdgeRadius: 0
+--- !u!114 &6137867193363796465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3980259680756544916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35a71e55e575cd14295c19e19c22e92f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RoomFootprint
+  boxColliders: []
 --- !u!1 &8995043805720338341
 GameObject:
   m_ObjectHideFlags: 0

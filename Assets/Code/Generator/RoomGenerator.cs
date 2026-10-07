@@ -43,19 +43,25 @@ public class RoomGenerator : MonoBehaviour
             return;
         }
 
+        //set a random seed
         CurrentSeed = runSeed;
         seed = CurrentSeed;
         var random = new System.Random(CurrentSeed);
 
+
+        //jestli neni root kam davat mistnosti da to sem
         Transform root = GetGeneratedRoomsRoot();
         ClearGeneratedRooms(root);
 
+        //jestli se daji mistnosti pouzit
         List<RoomDefinition> starts = GetRoomCandidates(null);
         if (starts.Count == 0)
         {
             Debug.LogError("No valid RoomDefinition is available.", this);
             return;
         }
+
+
 
         int remainingAttempts = maxGenerationAttempts;
         while (starts.Count > 0 && remainingAttempts > 0)
@@ -68,8 +74,10 @@ public class RoomGenerator : MonoBehaviour
             firstRoom.transform.localPosition = Vector3.zero;
             firstRoom.transform.localRotation = Quaternion.identity;
 
-            RoomConnector firstExit = FindConnector(firstRoom, RoomConnector.ConnectionType.Exit);
-            BoxCollider2D firstFootprint = FindFootprint(firstRoom);
+            RoomConnector firstExit = FindConnector(firstRoom, RoomConnector.ConnectionType.Exit); //najdne exity
+            BoxCollider2D[] firstFootprint = FindFootprint(firstRoom); //najde collider
+
+            //collider check
             if (firstFootprint == null || (roomCount > 1 && firstExit == null))
             {
                 Debug.LogWarning($"Skipping start room '{firstDefinition.name}': it needs a root BoxCollider2D footprint and an Exit connector.", firstRoom);
@@ -77,7 +85,12 @@ public class RoomGenerator : MonoBehaviour
                 continue;
             }
 
-            var placedFootprints = new List<BoxCollider2D> { firstFootprint };
+            var placedFootprints = new List<BoxCollider2D>();
+            foreach (var footprint in firstFootprint) {
+                placedFootprints.Add(footprint);
+            }
+
+
             if (roomCount == 1 || TryGenerateNextRoom(1, firstExit, firstRoom.transform, root, placedFootprints, random, ref remainingAttempts))
             {
                 Debug.Log($"Generated {roomCount} rooms with seed {CurrentSeed}.", this);
@@ -103,18 +116,22 @@ public class RoomGenerator : MonoBehaviour
         if (roomIndex >= roomCount)
             return true;
 
-        List<RoomDefinition> candidates = GetRoomCandidates(RoomConnector.ConnectionType.Entry);
+        List<RoomDefinition> candidates = GetRoomCandidates(RoomConnector.ConnectionType.Entry); //najde vstupy
+
         while (candidates.Count > 0 && remainingAttempts > 0)
         {
             remainingAttempts--;
-            int candidateIndex = random.Next(candidates.Count);
+            int candidateIndex = random.Next(candidates.Count); //vybere dalsi mistnost
+
             RoomDefinition definition = candidates[candidateIndex];
             candidates.RemoveAt(candidateIndex);
 
             GameObject room = Instantiate(definition.prefab, root);
+
             RoomConnector entry = FindConnector(room, RoomConnector.ConnectionType.Entry);
             RoomConnector exit = FindConnector(room, RoomConnector.ConnectionType.Exit);
-            BoxCollider2D footprint = FindFootprint(room);
+
+            BoxCollider2D[] footprint = FindFootprint(room);
 
             if (entry == null || exit == null || footprint == null)
             {
@@ -128,29 +145,56 @@ public class RoomGenerator : MonoBehaviour
             float angle = Vector2.SignedAngle(entryFacing, -exitFacing);
             room.transform.Rotate(0f, 0f, angle, Space.World);
 
+
             Vector3 offset = previousExit.transform.position - entry.transform.position;
-            room.transform.position += offset;
+            room.transform.position += offset; //nastavi na entry/exit
+
             Physics2D.SyncTransforms();
 
-            if (OverlapsPlacedRoom(footprint, placedFootprints))
+            bool overlaps = false;
+            foreach (BoxCollider2D box in footprint)
+            {
+                if (box != null && OverlapsPlacedRoom(box, placedFootprints))
+                {
+                    overlaps = true;
+                    break;
+                }
+            }
+
+            if (overlaps)
             {
                 Destroy(room);
                 Physics2D.SyncTransforms();
                 continue;
             }
 
-            placedFootprints.Add(footprint);
-            if (TryGenerateNextRoom(roomIndex + 1, exit, room.transform, root, placedFootprints, random, ref remainingAttempts))
-                return true;
+            int addedFootprintCount = footprint.Length;
+            placedFootprints.AddRange(footprint);
 
-            placedFootprints.RemoveAt(placedFootprints.Count - 1);
+            if (TryGenerateNextRoom(
+                roomIndex + 1,
+                exit,
+                room.transform,
+                root,
+                placedFootprints,
+                random,
+                ref remainingAttempts))
+            {
+                return true;
+            }
+
+            // Backtrack: remove ALL colliders belonging to this room
+            placedFootprints.RemoveRange(
+                placedFootprints.Count - addedFootprintCount,
+                addedFootprintCount
+            );
+
             Destroy(room);
             Physics2D.SyncTransforms();
         }
 
         return false;
     }
-
     private List<RoomDefinition> GetRoomCandidates(RoomConnector.ConnectionType? requiredType)
     {
         var candidates = new List<RoomDefinition>();
@@ -173,10 +217,10 @@ public class RoomGenerator : MonoBehaviour
         return candidates;
     }
 
-    private static BoxCollider2D FindFootprint(GameObject room)
+    private static BoxCollider2D[] FindFootprint(GameObject room)
     {
         // Keep this collider dedicated to the room footprint, separate from gameplay colliders.
-        return room.GetComponent<BoxCollider2D>();
+        return room.GetComponent<RoomFootprint>().boxColliders;
     }
 
     private static bool OverlapsPlacedRoom(BoxCollider2D candidate, List<BoxCollider2D> placedFootprints)
