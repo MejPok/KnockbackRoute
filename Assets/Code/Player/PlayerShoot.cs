@@ -24,9 +24,13 @@ public class PlayerShoot : MonoBehaviour
     Vector2 aimDirection;
     [SerializeField] float temporaryVelocityBoost;
 
-    void Start()
+    void Awake()
     {
         Instance = this;
+    }
+
+    void Start()
+    {
         bulletInventory = GetComponent<BulletInventory>();
         rb = GetComponent<Rigidbody2D>();
     }
@@ -34,10 +38,7 @@ public class PlayerShoot : MonoBehaviour
     {
         RotatePlayer();
 
-        if (!enableVelocityBoost || rb.linearVelocity.magnitude < maxVelocity * nearMaxSpeedThreshold)
-        {
-            temporaryVelocityBoost = 0f;
-        }
+        SpeedControl();
 
         if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
         {
@@ -74,6 +75,7 @@ public class PlayerShoot : MonoBehaviour
         {
             return;
         }
+
         bulletInventory.NormalBulletsCount -= 1;
         GetComponent<ParticleHolder>().useParticle(transform.GetChild(1), 0);
 
@@ -87,7 +89,9 @@ public class PlayerShoot : MonoBehaviour
             Destroy(bullet);
             return;
         }
+        
         bulletRb.linearVelocity = aimDirection * bulletSpeed;
+
         Destroy(bullet, bulletLifetime);
 
         if (enableVelocityBoost && rb.linearVelocity.magnitude >= maxVelocity * nearMaxSpeedThreshold)
@@ -97,12 +101,24 @@ public class PlayerShoot : MonoBehaviour
 
         rb.AddForce(-aimDirection * recoilImpulse, ForceMode2D.Impulse);
 
+        SpeedControl();
+    }
+
+    void SpeedControl()
+    {
         float currentMaxVelocity = maxVelocity + (enableVelocityBoost ? temporaryVelocityBoost : 0f);
+
+        if (!enableVelocityBoost || rb.linearVelocity.magnitude < currentMaxVelocity * nearMaxSpeedThreshold)
+        {
+            temporaryVelocityBoost *= 0.99f;
+        }
+
         if (rb.linearVelocity.magnitude > currentMaxVelocity)
         {
             rb.linearVelocity = Vector2.ClampMagnitude(rb.linearVelocity, currentMaxVelocity);
         }
-
-
     }
+
+
+    
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7e8ba96cc7ef124aa1441f1565d6603, type: 3}
   m_Name: Corner Left
   m_EditorClassIdentifier: Assembly-CSharp::RoomDefinition
-  prefab: {fileID: 3934912832536705205, guid: ac4f0e842a59b3d48ab829ce56111fb2, type: 3}
+  prefab: {fileID: 5111221038579348029, guid: 27977d813751e6f4abbccf74617919ca, type: 3}
   tags: []
   difficulty: 1
   entry: {fileID: 0}

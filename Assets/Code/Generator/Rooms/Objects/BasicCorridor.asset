@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7e8ba96cc7ef124aa1441f1565d6603, type: 3}
   m_Name: BasicCorridor
   m_EditorClassIdentifier: Assembly-CSharp::RoomDefinition
-  prefab: {fileID: 6531343397328278734, guid: 6c392524cf0f3114b9e0e162a1791d95, type: 3}
+  prefab: {fileID: 7267909012931857568, guid: 3e12cef2e2517b54c84d9152220af261, type: 3}
   tags: []
   difficulty: 0
   entry: {fileID: 0}
