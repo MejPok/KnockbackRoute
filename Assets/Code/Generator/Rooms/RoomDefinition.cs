@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Generation/Room Definition")]
@@ -8,6 +9,7 @@ public class RoomDefinition : ScriptableObject
     public int difficulty;
     public RoomConnector entry;
     public RoomConnector exit;
+    public GameObject[] specialObstacleObject;
     
     public void FindConnectionPoints()
     {
@@ -28,5 +30,11 @@ public class RoomDefinition : ScriptableObject
         return prefab != null
             ? prefab.GetComponentsInChildren<RoomConnector>(true)
             : System.Array.Empty<RoomConnector>();
+    }
+
+    public void FindSpecialObstacles()
+    {
+        specialObstacleObject.AddRange(prefab.GetComponentsInChildren<ButtonBullet>(true));
+        specialObstacleObject.AddRange(prefab.GetComponentsInChildren<ButtonDoor>(true));
     }
 }
