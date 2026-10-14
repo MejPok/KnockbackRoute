@@ -915,12 +915,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a493f45179a1bcb4d8dc8172724f6751, type: 2}
   - {fileID: 11400000, guid: 9176069fadd5630459949611195bb99b, type: 2}
   - {fileID: 11400000, guid: 39b26287062d5304389444e6df3cb83d, type: 2}
-  roomCount: 10
+  roomCount: 40
+  roomsGenerated: 0
   generatedRoomsRoot: {fileID: 0}
   maxGenerationAttempts: 2000
   seed: 0
   createSeedOnStart: 1
   generateOnStart: 1
+  GenerateRoomsAhead: 5
 --- !u!4 &140988283
 Transform:
   m_ObjectHideFlags: 0

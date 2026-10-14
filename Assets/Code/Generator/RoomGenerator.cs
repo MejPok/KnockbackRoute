@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Builds a linear run by joining each room's Entry connector to the previous
@@ -11,6 +12,8 @@ public class RoomGenerator : MonoBehaviour
     [Header("Room pool")]
     [SerializeField] private RoomDefinition[] rooms;
     [SerializeField, Min(1)] private int roomCount = 8;
+    [SerializeField] private int roomsGenerated = 0;
+
     [SerializeField] private Transform generatedRoomsRoot;
     [SerializeField, Min(1)] private int maxGenerationAttempts = 2000;
 
@@ -20,22 +23,44 @@ public class RoomGenerator : MonoBehaviour
     [SerializeField] private bool generateOnStart = true;
 
     public int CurrentSeed { get; private set; }
+    System.Random random;
+    public int GenerateRoomsAhead;
 
     private void Start()
     {
         if (generateOnStart)
             Generate();
     }
+    void Update()
+    {
+        if (Keyboard.current.rKey.wasPressedThisFrame)
+        {
+            GenerateNeededRooms();
+        }
+    }
 
     /// <summary>Generates a run using a fresh seed or the configured seed.</summary>
     public void Generate()
     {
+
+        CreateSeed();
+        GenerateWithSeed();
+    }
+
+    void CreateSeed()
+    {
         int runSeed = createSeedOnStart ? Environment.TickCount : seed;
-        GenerateWithSeed(runSeed);
+        if(CurrentSeed != -1)
+        {
+            CurrentSeed = runSeed;
+            seed = CurrentSeed;
+            random = new System.Random(CurrentSeed);
+        }
+        
     }
 
     /// <summary>Generates a run from an explicit seed for replayable runs.</summary>
-    public void GenerateWithSeed(int runSeed)
+    public void GenerateWithSeed()
     {
         if (rooms == null || rooms.Length == 0)
         {
@@ -43,15 +68,15 @@ public class RoomGenerator : MonoBehaviour
             return;
         }
 
-        //set a random seed
-        CurrentSeed = runSeed;
-        seed = CurrentSeed;
-        var random = new System.Random(CurrentSeed);
+        GenerateNeededRooms();
 
+    }
 
-        //jestli neni root kam davat mistnosti da to sem
+    List<BoxCollider2D> placedFootprints = new List<BoxCollider2D>();
+    public void GenerateNeededRooms()
+    {
+       //jestli neni root kam davat mistnosti da to sem
         Transform root = GetGeneratedRoomsRoot();
-        ClearGeneratedRooms(root);
 
         //jestli se daji mistnosti pouzit
         List<RoomDefinition> starts = GetRoomCandidates(null);
@@ -61,61 +86,87 @@ public class RoomGenerator : MonoBehaviour
             return;
         }
 
-
-
         int remainingAttempts = maxGenerationAttempts;
         while (starts.Count > 0 && remainingAttempts > 0)
         {
-            int startIndex = random.Next(starts.Count);
+            
+            int startIndex = random.Next(starts.Count); // nahodne generovani
+
             RoomDefinition firstDefinition = starts[startIndex];
             starts.RemoveAt(startIndex);
 
-            GameObject firstRoom = Instantiate(firstDefinition.prefab, root);
-            firstRoom.transform.localPosition = Vector3.zero;
-            firstRoom.transform.localRotation = Quaternion.identity;
+            GameObject firstRoom;
+            RoomConnector firstExit;
+            BoxCollider2D[] firstFootprint;
 
-            RoomConnector firstExit = FindConnector(firstRoom, RoomConnector.ConnectionType.Exit); //najdne exity
-            BoxCollider2D[] firstFootprint = FindFootprint(firstRoom); //najde collider
-
-            //collider check
-            if (firstFootprint == null || (roomCount > 1 && firstExit == null))
+            if(roomsGenerated == 0)
             {
-                Debug.LogWarning($"Skipping start room '{firstDefinition.name}': it needs a root BoxCollider2D footprint and an Exit connector.", firstRoom);
+                firstRoom = Instantiate(firstDefinition.prefab, root);
+
+                firstRoom.transform.localPosition = Vector3.zero;
+                firstRoom.transform.localRotation = Quaternion.identity;
+
+                firstExit = FindConnector(firstRoom, RoomConnector.ConnectionType.Exit); //najdne exity
+                firstFootprint = FindFootprint(firstRoom); //najde collider
+
+                           //collider check
+                if (firstFootprint == null || (roomCount > 1 && firstExit == null))
+                {
+                    Debug.LogWarning($"Skipping start room '{firstDefinition.name}': it needs a root BoxCollider2D footprint and an Exit connector.", firstRoom);
+                    Destroy(firstRoom);
+                    continue;
+                }
+
+                foreach (var footprint in firstFootprint) {
+                    placedFootprints.Add(footprint);
+                }
+
+                generatedNewRooms = 1;
+                if(roomsGenerated == 0)
+                {
+                    if (roomCount == 1 || TryGenerateNextRoom(roomsGenerated - 1, firstExit, firstRoom.transform, root, placedFootprints, random, ref remainingAttempts, ref generatedNewRooms))
+                    {
+                        Debug.Log($"Generated {roomsGenerated} rooms with seed {CurrentSeed}.", this);
+                        return;
+                    }
+                }
+
                 Destroy(firstRoom);
-                continue;
+                Physics2D.SyncTransforms();
+
             }
 
-            var placedFootprints = new List<BoxCollider2D>();
-            foreach (var footprint in firstFootprint) {
-                placedFootprints.Add(footprint);
-            }
-
-
-            if (roomCount == 1 || TryGenerateNextRoom(1, firstExit, firstRoom.transform, root, placedFootprints, random, ref remainingAttempts))
+            var lastRoom = root.GetChild(roomsGenerated);
+            generatedNewRooms = 1;
+            if (roomCount == 1 || TryGenerateNextRoom(roomsGenerated - 1, lastRoomGeneratedExit, lastRoom.transform, root, placedFootprints, random, ref remainingAttempts, ref generatedNewRooms))
             {
-                Debug.Log($"Generated {roomCount} rooms with seed {CurrentSeed}.", this);
+                Debug.Log($"Generated {roomsGenerated} rooms with seed {CurrentSeed}.", this);
                 return;
             }
 
-            Destroy(firstRoom);
             Physics2D.SyncTransforms();
         }
 
-        Debug.LogWarning($"Could not generate {roomCount} non-overlapping rooms with seed {CurrentSeed} after {maxGenerationAttempts} placement attempts. Try another seed, more room layouts, or a higher attempt limit.", this);
+        Debug.LogWarning($"Could not generate {roomCount} non-overlapping rooms with seed {CurrentSeed} after {maxGenerationAttempts} placement attempts. Try another seed, more room layouts, or a higher attempt limit.", this); 
     }
-
-    private bool TryGenerateNextRoom(
+    int generatedNewRooms;
+    RoomConnector lastRoomGeneratedExit;
+    private bool TryGenerateNextRoom
+        (
         int roomIndex,
         RoomConnector previousExit,
         Transform previousRoomTransform,
         Transform root,
         List<BoxCollider2D> placedFootprints,
         System.Random random,
-        ref int remainingAttempts)
+        ref int remainingAttempts,
+        ref int generatedNewRooms
+        )
     {
-        if (roomIndex >= roomCount)
-            return true;
 
+        if (generatedNewRooms >= GenerateRoomsAhead || roomIndex >= roomCount)
+            return true;
+        
         List<RoomDefinition> candidates = GetRoomCandidates(RoomConnector.ConnectionType.Entry); //najde vstupy
 
         while (candidates.Count > 0 && remainingAttempts > 0)
@@ -131,6 +182,7 @@ public class RoomGenerator : MonoBehaviour
             RoomConnector entry = FindConnector(room, RoomConnector.ConnectionType.Entry);
             RoomConnector exit = FindConnector(room, RoomConnector.ConnectionType.Exit);
 
+            lastRoomGeneratedExit = exit;
             BoxCollider2D[] footprint = FindFootprint(room);
 
             if (entry == null || exit == null || footprint == null)
@@ -171,6 +223,10 @@ public class RoomGenerator : MonoBehaviour
             int addedFootprintCount = footprint.Length;
             placedFootprints.AddRange(footprint);
 
+            
+            generatedNewRooms += 1;
+            roomsGenerated = roomIndex + 1;
+
             if (TryGenerateNextRoom(
                 roomIndex + 1,
                 exit,
@@ -178,7 +234,8 @@ public class RoomGenerator : MonoBehaviour
                 root,
                 placedFootprints,
                 random,
-                ref remainingAttempts))
+                ref remainingAttempts,
+                ref generatedNewRooms))
             {
                 return true;
             }
