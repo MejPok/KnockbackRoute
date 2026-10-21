@@ -21,7 +21,7 @@ public class PlayerShoot : MonoBehaviour
     BulletInventory bulletInventory;
 
     Rigidbody2D rb;
-    Vector2 aimDirection;
+    public Vector2 aimDirection;
     [SerializeField] float temporaryVelocityBoost;
 
     void Awake()

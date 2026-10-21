@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4239969105736174346}
   - component: {fileID: 5458028472179625802}
   - component: {fileID: 4882436908429272150}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -760,7 +760,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5223490481118973709}
   - component: {fileID: 5627700006315290732}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -806,7 +806,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1576515075701231329}
   - component: {fileID: 4113992852431306278}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Entry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -993,7 +993,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7651791500850000750}
   - component: {fileID: 4550986956580825990}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
