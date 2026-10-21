@@ -16,8 +16,10 @@ public class RoomGenerator : MonoBehaviour
 
     [Header("Section size")]
     [SerializeField, Min(1)] public int GenerateRoomsAhead = 5;
+    [SerializeField, Min(1)] private int rollbackSections = 3;
 
     [SerializeField] private bool generateOnStart = true;
+    private int requestedRoomCount;
 
     public int RoomsGenerated => roomsGenerated;
 
@@ -34,6 +36,7 @@ public class RoomGenerator : MonoBehaviour
     {
         CreateGeneratedRoot();
         roomsGenerated = 0;
+        requestedRoomCount = 0;
         GenerateFirstRoom();
 
     }
@@ -50,39 +53,44 @@ public class RoomGenerator : MonoBehaviour
 
     public void GenerateFirstRoom()
     {
-        #nullable enable
-        RoomDefinition? firstRoom = decider.ChooseRandomRoom();
-        if(firstRoom == null)   return;
-
-        placer.PlaceFirstRoom(firstRoom, generatedRoomsRoot);
-        roomsGenerated = 1;
-
+        bool placed = placer.PlaceFirstRoom(decider.GetRoomCandidates(), generatedRoomsRoot);
+        roomsGenerated = placer.RoomsPlaced;
+        requestedRoomCount = roomsGenerated;
+        if (!placed) Debug.LogError("No eligible starting room could be placed.", this);
 
     }
 
     /// <summary>Generate the next rooms during gameplay. Call this when the player is nearing the end of the current section.</summary>
     public bool GenerateNextSection()
     {
-        if (roomsGenerated >= roomCount) return true;
-        int roomsToAdd = Mathf.Min(Mathf.Max(1, GenerateRoomsAhead), roomCount - roomsGenerated);
-        bool generated = placer.GenerateRoomsWithBacktracking(decider.GetRoomCandidates(), generatedRoomsRoot, roomsToAdd);
-        if (generated) roomsGenerated += roomsToAdd;
+        if (requestedRoomCount >= roomCount && roomsGenerated >= roomCount) return true;
+        if (requestedRoomCount <= roomsGenerated)
+            requestedRoomCount = Mathf.Min(roomCount, roomsGenerated + Mathf.Max(1, GenerateRoomsAhead));
+
+        bool generated = placer.GenerateRoomsUpToCount(
+            decider.GetRoomCandidates(), generatedRoomsRoot, requestedRoomCount, maxGenerationAttempts);
+        roomsGenerated = placer.RoomsPlaced;
+        if (!generated)
+            RollbackFailedSection();
         return generated;
     }
 
-/*
-    private void EnsurePlacementSolver()
+    private void RollbackFailedSection()
     {
-        
+        int roomsPerSection = Mathf.Max(1, GenerateRoomsAhead);
+        int roomsToRollback = roomsPerSection * rollbackSections;
+        int removedRooms = placer.RollbackLastRooms(roomsToRollback);
+        roomsGenerated = placer.RoomsPlaced;
 
-        var contracts = new List<RoomContract> { contract };
-        if (additionalContracts != null) contracts.AddRange(additionalContracts);
-        var selection = new RoomSelectionPolicy(rooms, contracts.ToArray(), roomCount);
-        var signalPairing = new RoomSignalPairing(CurrentSeed);
-        placementSolver = new RoomPlacementSolver(
-            generatedRoomsRoot,
-            selection,
-            signalPairing,
-            new System.Random(CurrentSeed));
-    } */
+        Debug.LogWarning(
+            $"Could not complete generation after {maxGenerationAttempts} attempts. " +
+            $"Rolled back {removedRooms} rooms ({rollbackSections} sections) and will retry from there.", this);
+    }
+    void Update()
+    {
+        if (Keyboard.current.gKey.wasPressedThisFrame)
+        {
+            GenerateNextSection();
+        }
+    }
 }
