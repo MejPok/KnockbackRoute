@@ -9,8 +9,27 @@ public class ButtonDoor : MonoBehaviour
 
     public float moveSpeed = 2f;
     public float openDuration = 1f;
+    [Tooltip("Optional channel name shared with a ButtonBullet in another room.")]
+    public string signalId;
 
     public bool open;
+
+    void OnEnable()
+    {
+        RoomSignalBus.Subscribe(signalId, OpenDoor);
+    }
+
+    void OnDisable()
+    {
+        RoomSignalBus.Unsubscribe(signalId, OpenDoor);
+    }
+
+    public void SetSignalId(string newSignalId)
+    {
+        RoomSignalBus.Unsubscribe(signalId, OpenDoor);
+        signalId = newSignalId;
+        if (isActiveAndEnabled) RoomSignalBus.Subscribe(signalId, OpenDoor);
+    }
 
     public void OpenDoor()
     {

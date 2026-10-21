@@ -5,7 +5,7 @@ public class RoomDefinition : ScriptableObject
 {
     public GameObject prefab;
     public string[] tags;
-    public int difficulty;
+    [Min(0)] public int difficulty;
     public RoomConnector entry;
     public RoomConnector exit;
     
