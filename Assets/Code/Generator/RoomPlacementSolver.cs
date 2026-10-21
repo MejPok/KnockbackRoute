@@ -1,3 +1,4 @@
+/*
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +8,6 @@ internal sealed class RoomPlacementSolver
     private readonly Transform root;
     private readonly RoomSelectionPolicy selection;
     private readonly RoomSignalPairing signals;
-    private readonly System.Random random;
     private readonly List<BoxCollider2D> placedFootprints = new List<BoxCollider2D>();
 
     private RoomConnector lastExit;
@@ -20,7 +20,6 @@ internal sealed class RoomPlacementSolver
         this.root = root;
         this.selection = selection;
         this.signals = signals;
-        this.random = random;
     }
 
     public void Reset()
@@ -69,6 +68,7 @@ internal sealed class RoomPlacementSolver
             GameObject start = Object.Instantiate(definition.prefab, root);
             start.transform.localPosition = Vector3.zero;
             start.transform.localRotation = Quaternion.identity;
+
             RoomConnector exit = FindConnector(start, RoomConnector.ConnectionType.Exit);
             BoxCollider2D[] footprint = FindFootprints(start);
             if ((totalRoomCount > 1 && exit == null) || footprint == null || footprint.Length == 0)
@@ -187,8 +187,6 @@ internal sealed class RoomPlacementSolver
         return false;
     }
 
-    private RoomDefinition ChooseCandidate(List<RoomDefinition> candidates) => candidates[random.Next(candidates.Count)];
-
     private void Shuffle(List<RoomDefinition> candidates)
     {
         for (int i = candidates.Count - 1; i > 0; i--)
@@ -212,11 +210,6 @@ internal sealed class RoomPlacementSolver
         foreach (BoxCollider2D footprint in footprints) placedFootprints.Remove(footprint);
     }
 
-    private static BoxCollider2D[] FindFootprints(GameObject room)
-    {
-        RoomFootprint footprint = room.GetComponent<RoomFootprint>();
-        return footprint != null ? footprint.boxColliders : null;
-    }
 
     private static RoomConnector FindConnector(GameObject room, RoomConnector.ConnectionType type)
     {
@@ -257,4 +250,4 @@ internal sealed class RoomPlacementSolver
         for (int i = root.childCount - 1; i >= 0; i--)
             DestroyRoom(root.GetChild(i).gameObject);
     }
-}
+} */
