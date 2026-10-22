@@ -9,9 +9,10 @@ using UnityEngine.InputSystem;
 
 public class RoomGenerator : MonoBehaviour
 {
+    public static RoomGenerator Instance;
     [SerializeField, Min(1)] private int roomCount = 40;
     [SerializeField] private int roomsGenerated;
-    [SerializeField] private Transform generatedRoomsRoot;
+    [SerializeField] public Transform generatedRoomsRoot;
     [SerializeField, Min(1)] private int maxGenerationAttempts = 2000;
 
     [Header("Section size")]
@@ -25,6 +26,11 @@ public class RoomGenerator : MonoBehaviour
 
     RoomDecider decider;
     RoomPlacer placer;
+
+    void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         decider = GetComponent<RoomDecider>();

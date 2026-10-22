@@ -7,6 +7,7 @@ TagManager:
   - Bullet
   - Button
   - Door
+  - Tilemap
   layers:
   - Default
   - TransparentFX
