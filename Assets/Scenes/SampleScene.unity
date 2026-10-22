@@ -896,6 +896,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 39b26287062d5304389444e6df3cb83d, type: 2}
   createSeedOnStart: 0
   seed: 0
+  possibleContracts: []
 --- !u!114 &140988285
 MonoBehaviour:
   m_ObjectHideFlags: 0

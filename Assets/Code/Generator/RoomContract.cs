@@ -18,7 +18,7 @@ public class RoomContract : ScriptableObject
         [Min(1)] public int minCount = 1;
         [Min(1)] public int maxCount = 1;
         public bool enableRandomCount;
-
+        /*
         public int getRealCount()
         {
             if (enableRandomCount)
@@ -29,7 +29,7 @@ public class RoomContract : ScriptableObject
                 Count = minCount;
             }
             return Count;
-        }
+        } */
 
 
 

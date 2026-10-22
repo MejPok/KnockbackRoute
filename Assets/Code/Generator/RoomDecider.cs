@@ -10,6 +10,10 @@ public class RoomDecider : MonoBehaviour
     [SerializeField] private bool createSeedOnStart = true;
     public int CurrentSeed { get; private set; }
     [SerializeField] private int seed;
+
+    [Serialize]
+    public RoomContract[] possibleContracts;
+    
     private System.Random random;
 
     public void CreateNewSeed()
