@@ -106,8 +106,8 @@ public class PlayerShoot : MonoBehaviour
 
     void SpeedControl()
     {
-        float currentMaxVelocity = maxVelocity + (enableVelocityBoost ? temporaryVelocityBoost : 0f);
 
+        float currentMaxVelocity = maxVelocity + (enableVelocityBoost ? temporaryVelocityBoost : 0f) * (2 - GetComponent<PlayerCorruptionHp>().HpPercentage());
         if (!enableVelocityBoost || rb.linearVelocity.magnitude < currentMaxVelocity * nearMaxSpeedThreshold)
         {
             temporaryVelocityBoost *= 0.99f;
@@ -117,6 +117,7 @@ public class PlayerShoot : MonoBehaviour
         {
             rb.linearVelocity = Vector2.ClampMagnitude(rb.linearVelocity, currentMaxVelocity);
         }
+
     }
 
 
