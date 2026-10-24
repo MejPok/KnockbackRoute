@@ -4,9 +4,11 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using System.Linq;
+using JetBrains.Annotations;
 public class RoomDecider : MonoBehaviour
 {
-    [SerializeField] private RoomDefinition[] rooms;
+    public int Difficulty;
+    [SerializeField] public RoomDefinition[] Rooms;
     [SerializeField] private bool createSeedOnStart = true;
     public int CurrentSeed { get; private set; }
     [SerializeField] private int seed;
@@ -29,26 +31,96 @@ public class RoomDecider : MonoBehaviour
 
     private bool HasRoomPool()
     {
-        if (rooms != null && rooms.Length > 0) return true;
+        if (Rooms != null && Rooms.Length > 0) return true;
         Debug.LogError("RoomDecider needs at least one RoomDefinition.", this);
         return false;
     }
 
-    public RoomDefinition[] GetRoomCandidates()
+    public RoomDefinition[] GetRandomRoomCandidates()
     {
         if (!HasRoomPool()) return Array.Empty<RoomDefinition>();
-        return (RoomDefinition[])rooms.Clone();
+
+        var roomsClone = ((RoomDefinition[])Rooms.Clone()).ToList();
+        Shuffler.Shuffle(roomsClone);
+
+        return roomsClone.ToArray();
     }
+
+
+
+    List<ContractQualificator> contractQualifaction = new List<ContractQualificator>();
+    public bool contractFinished;
+
+    bool ChooseNewContract()
+    {
+        contractQualifaction.Add(new ContractQualificator(this));
+        if (contractQualifaction[contractQualifaction.Count - 1].ChooseNewContract())
+        {
+            RoomGenerator.Instance.contractNumber++;
+            
+            return true;
+        } else
+        {
+            return false;
+        }
+        
+    }
+
+    /*
+    jetli neexistuje contract
+        Vytvorit moznej contract
+
+        ziskat vsechny mozne mistnosti pro nej
+
+    vracet random mozne mistnosti pri getovani mistnosti
+
+    */
+
+    public RoomDefinition[] ContractStepCandidates(int step)
+    {
+        if(contractQualifaction.Count == 0)
+        {
+            ChooseNewContract();
+        }
+        if(RoomGenerator.Instance.contractNumber >= contractQualifaction.Count())
+        {
+            Debug.Log($"Neexistuje contract pro {RoomGenerator.Instance.contractNumber} ve vygenerovanych contractech");
+        }
+        return contractQualifaction[RoomGenerator.Instance.contractNumber].qualifiedRooms[step].ToArray();
+    }
+
+    public bool CheckContractEnd(int phase)
+    {
+        if(phase >= contractQualifaction[RoomGenerator.Instance.contractNumber].qualifiedRooms.Count)
+        {
+            return ChooseNewContract();
+        }
+        return false;
+    }
+
+    public int StepRoomCount(int phase)
+    {
+        if(phase >= contractQualifaction[RoomGenerator.Instance.contractNumber].contractSteps.Count())
+        {
+            ChooseNewContract();
+        }
+
+        return contractQualifaction[RoomGenerator.Instance.contractNumber].contractSteps[phase].getRealCount();
+    }
+    
+
+
+
 
     #nullable enable
     public RoomDefinition? ChooseRandomRoom(int difficulty = 1)
     {
         if (HasRoomPool())
         {
-            var candidate = ChooseRandomCandidate(rooms.ToList());
+            var candidate = ChooseRandomCandidate(Rooms.ToList());
             while(candidate.difficulty > difficulty)
             {
-                candidate = ChooseRandomCandidate(rooms.ToList());
+                candidate = ChooseRandomCandidate(Rooms.ToList());
             }
             
             return candidate;
@@ -56,6 +128,7 @@ public class RoomDecider : MonoBehaviour
 
         return null;
     }
+
 
     private RoomDefinition ChooseRandomCandidate(List<RoomDefinition> candidates)
     {

@@ -41,8 +41,10 @@ public class RoomGenerator : MonoBehaviour
     public void StartGeneration()
     {
         CreateGeneratedRoot();
+
         roomsGenerated = 0;
         requestedRoomCount = 0;
+
         GenerateFirstRoom();
 
     }
@@ -59,25 +61,53 @@ public class RoomGenerator : MonoBehaviour
 
     public void GenerateFirstRoom()
     {
-        bool placed = placer.PlaceFirstRoom(decider.GetRoomCandidates(), generatedRoomsRoot);
+        bool placed = placer.PlaceFirstRoom(decider.GetRandomRoomCandidates(), generatedRoomsRoot);
+
         roomsGenerated = placer.RoomsPlaced;
         requestedRoomCount = roomsGenerated;
+
         if (!placed) Debug.LogError("No eligible starting room could be placed.", this);
 
     }
 
     /// <summary>Generate the next rooms during gameplay. Call this when the player is nearing the end of the current section.</summary>
-    public bool GenerateNextSection()
+    public bool GenerateNextRandomSection()
     {
         if (requestedRoomCount >= roomCount && roomsGenerated >= roomCount) return true;
         if (requestedRoomCount <= roomsGenerated)
             requestedRoomCount = Mathf.Min(roomCount, roomsGenerated + Mathf.Max(1, GenerateRoomsAhead));
 
         bool generated = placer.GenerateRoomsUpToCount(
-            decider.GetRoomCandidates(), generatedRoomsRoot, requestedRoomCount, maxGenerationAttempts);
+            decider.GetRandomRoomCandidates(), generatedRoomsRoot, requestedRoomCount, maxGenerationAttempts);
+
         roomsGenerated = placer.RoomsPlaced;
         if (!generated)
             RollbackFailedSection();
+        return generated;
+    }
+
+    public int contractNumber;
+    public int contractPhase;
+
+    public bool GenerateNextSection()
+    {
+        if (roomsGenerated >= roomCount) return true;
+        
+        bool generated = placer.GenerateRoomsUpToCount(
+            decider.ContractStepCandidates(contractPhase), generatedRoomsRoot, decider.StepRoomCount(contractPhase), maxGenerationAttempts);
+
+        roomsGenerated = placer.RoomsPlaced;
+
+        if (!generated)
+        {
+            RollbackFailedSection();
+        } else
+        {
+            contractPhase++;
+        }
+
+        decider.CheckContractEnd(contractPhase);
+            
         return generated;
     }
 

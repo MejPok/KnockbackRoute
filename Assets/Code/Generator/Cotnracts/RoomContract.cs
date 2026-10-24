@@ -18,18 +18,20 @@ public class RoomContract : ScriptableObject
         [Min(1)] public int minCount = 1;
         [Min(1)] public int maxCount = 1;
         public bool enableRandomCount;
-        /*
+        
         public int getRealCount()
         {
+            int tempCount;
             if (enableRandomCount)
             {
-                Count = new System.Random().Next(minCount, maxCount);
+                tempCount= new System.Random().Next(minCount, maxCount);
             } else
             {
-                Count = minCount;
+                tempCount = minCount;
             }
-            return Count;
-        } */
+
+            return tempCount;
+        } 
 
 
 
@@ -38,7 +40,7 @@ public class RoomContract : ScriptableObject
     [Tooltip("Each entry applies once at its room index. Rooms after the last step use difficulty-based random selection.")]
     public Step[] steps;
 
-    /*
+    
     public int GetAverageContractDifficulty()
     {
         int allDifficulty = 0;
@@ -47,7 +49,10 @@ public class RoomContract : ScriptableObject
             int averageStepDifficulty = (step.minimumDifficulty + step.maximumDifficulty) / 2;
             allDifficulty += averageStepDifficulty * step.getRealCount();
         }
-    } */
+        return allDifficulty;
+    } 
+
+    public int ExpectedDifficulty;
 
     public int StepCount => steps != null ? steps.Length : 0;
 
