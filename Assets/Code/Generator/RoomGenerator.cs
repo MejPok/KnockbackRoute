@@ -41,8 +41,10 @@ public class RoomGenerator : MonoBehaviour
     public void StartGeneration()
     {
         CreateGeneratedRoot();
+
         roomsGenerated = 0;
         requestedRoomCount = 0;
+
         GenerateFirstRoom();
 
     }
@@ -59,25 +61,60 @@ public class RoomGenerator : MonoBehaviour
 
     public void GenerateFirstRoom()
     {
-        bool placed = placer.PlaceFirstRoom(decider.GetRoomCandidates(), generatedRoomsRoot);
+        bool placed = placer.PlaceFirstRoom(decider.GetRandomRoomCandidates(), generatedRoomsRoot);
+
         roomsGenerated = placer.RoomsPlaced;
         requestedRoomCount = roomsGenerated;
+
         if (!placed) Debug.LogError("No eligible starting room could be placed.", this);
 
     }
 
     /// <summary>Generate the next rooms during gameplay. Call this when the player is nearing the end of the current section.</summary>
-    public bool GenerateNextSection()
+    public bool GenerateNextRandomSection()
     {
         if (requestedRoomCount >= roomCount && roomsGenerated >= roomCount) return true;
         if (requestedRoomCount <= roomsGenerated)
             requestedRoomCount = Mathf.Min(roomCount, roomsGenerated + Mathf.Max(1, GenerateRoomsAhead));
 
         bool generated = placer.GenerateRoomsUpToCount(
-            decider.GetRoomCandidates(), generatedRoomsRoot, requestedRoomCount, maxGenerationAttempts);
+            decider.GetRandomRoomCandidates(), generatedRoomsRoot, requestedRoomCount, maxGenerationAttempts);
+
         roomsGenerated = placer.RoomsPlaced;
         if (!generated)
             RollbackFailedSection();
+        return generated;
+    }
+
+    public int contractNumber;
+    public int contractPhase;
+
+    public bool GenerateNextSection()
+    {
+        if (roomsGenerated >= roomCount) return true;
+        
+        int roomsForStep = decider.StepRoomCount(contractPhase);
+        if (roomsForStep <= 0) return false;
+
+        int targetRoomCount = Mathf.Min(roomCount, placer.RoomsPlaced + roomsForStep);
+        bool generated = placer.GenerateRoomsUpToCount(
+            decider.ContractStepCandidates(contractPhase), generatedRoomsRoot, targetRoomCount, maxGenerationAttempts);
+
+        roomsGenerated = placer.RoomsPlaced;
+
+        if (!generated)
+        {
+            RollbackFailedSection();
+        } else
+        {
+            contractPhase++;
+        }
+
+        if (decider.CheckContractEnd(contractPhase))
+        {
+            contractPhase = 0;
+        }
+            
         return generated;
     }
 
@@ -92,10 +129,20 @@ public class RoomGenerator : MonoBehaviour
             $"Could not complete generation after {maxGenerationAttempts} attempts. " +
             $"Rolled back {removedRooms} rooms ({rollbackSections} sections) and will retry from there.", this);
     }
+    public float StepSpawnCD = 0.5f;
+    float timer = 0f;
+    
     void Update()
     {
         if (Keyboard.current.gKey.wasPressedThisFrame)
         {
+            GenerateNextSection();
+        }
+
+        timer += Time.deltaTime;
+        if(timer >= StepSpawnCD)
+        {
+            timer = 0;
             GenerateNextSection();
         }
     }

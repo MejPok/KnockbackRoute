@@ -13,7 +13,6 @@ public class RoomPlacer : MonoBehaviour
         public CandidateFrame(RoomDefinition[] source)
         {
             candidates = new List<RoomDefinition>(source);
-            RoomPlacer.Shuffle(candidates);
         }
     }
 
@@ -95,9 +94,8 @@ public class RoomPlacer : MonoBehaviour
     {
         if (roomsToCheck <= 0) return true;
 
-        var shuffledCandidates = new List<RoomDefinition>(candidates);
-        Shuffle(shuffledCandidates);
-        foreach (RoomDefinition candidate in shuffledCandidates)
+        var Candidates = new List<RoomDefinition>(candidates);
+        foreach (RoomDefinition candidate in Candidates)
         {
             if (attemptsRemaining <= 0) return false;
             attemptsRemaining--;
@@ -111,14 +109,7 @@ public class RoomPlacer : MonoBehaviour
         return false;
     }
 
-    private static void Shuffle(List<RoomDefinition> items)
-    {
-        for (int i = items.Count - 1; i > 0; i--)
-        {
-            int swapIndex = Random.Range(0, i + 1);
-            (items[i], items[swapIndex]) = (items[swapIndex], items[i]);
-        }
-    }
+    
 
     private bool BacktrackFromCurrentDepth()
     {
