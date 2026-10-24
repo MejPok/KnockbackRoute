@@ -12,5 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a52be02eb0044c1a199fcf4e2405f62, type: 3}
   m_Name: BaseWal
   m_EditorClassIdentifier: Assembly-CSharp::RoomContract
-  steps: []
-  ExpectedDifficulty: 0
+  steps:
+  - requiredTag: 
+    minimumDifficulty: 0
+    maximumDifficulty: 3
+    Count: 1
+    minCount: 1
+    maxCount: 1
+    enableRandomCount: 0
+  ExpectedDifficulty: 1

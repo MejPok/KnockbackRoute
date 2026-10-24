@@ -27,6 +27,7 @@ public class RoomDecider : MonoBehaviour
     {
         CreateNewSeed();
         random = new System.Random(CurrentSeed);
+        ChooseNewContract();
     }
 
     private bool HasRoomPool()
@@ -51,12 +52,17 @@ public class RoomDecider : MonoBehaviour
     List<ContractQualificator> contractQualifaction = new List<ContractQualificator>();
     public bool contractFinished;
 
+    
     bool ChooseNewContract()
     {
         contractQualifaction.Add(new ContractQualificator(this));
         if (contractQualifaction[contractQualifaction.Count - 1].ChooseNewContract())
         {
-            RoomGenerator.Instance.contractNumber++;
+            if(contractQualifaction.Count() == 1)
+            {
+                RoomGenerator.Instance.contractNumber++;
+            }
+            
             
             return true;
         } else
@@ -78,10 +84,6 @@ public class RoomDecider : MonoBehaviour
 
     public RoomDefinition[] ContractStepCandidates(int step)
     {
-        if(contractQualifaction.Count == 0)
-        {
-            ChooseNewContract();
-        }
         if(RoomGenerator.Instance.contractNumber >= contractQualifaction.Count())
         {
             Debug.Log($"Neexistuje contract pro {RoomGenerator.Instance.contractNumber} ve vygenerovanych contractech");
@@ -100,10 +102,6 @@ public class RoomDecider : MonoBehaviour
 
     public int StepRoomCount(int phase)
     {
-        if(phase >= contractQualifaction[RoomGenerator.Instance.contractNumber].contractSteps.Count())
-        {
-            ChooseNewContract();
-        }
 
         return contractQualifaction[RoomGenerator.Instance.contractNumber].contractSteps[phase].getRealCount();
     }
