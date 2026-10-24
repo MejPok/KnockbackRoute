@@ -14,12 +14,13 @@ public class ContractQualificator
 
     public RoomContract.Step[] contractSteps;
     public List<List<RoomDefinition>> qualifiedRooms = new List<List<RoomDefinition>>();
+    public List<int> roomsPerStep = new List<int>();
     public int contractDepth;
 
     List<RoomDefinition> createdContractRooms = new List<RoomDefinition>();
     public bool ChooseNewContract()
     {
-        Shuffler.Shuffle(decider.possibleContracts.ToList());
+        Shuffler.Shuffle(decider.possibleContracts, decider.random);
         foreach(var contract in decider.possibleContracts)
         {
             if(Math.Abs(decider.Difficulty - contract.ExpectedDifficulty) <= 2)
@@ -56,16 +57,23 @@ public class ContractQualificator
                 
             }
 
+            Shuffler.Shuffle(possibleRooms, decider.random);
+
             qualifiedRooms.Add(possibleRooms);
 
         }
 
         if(qualifiedRooms.Count == contractSteps.Length)
         {
+            foreach(RoomContract.Step step in contractSteps)
+            {
+                roomsPerStep.Add(step.getRealCount());
+            }
             return true;
 
         } else
         {
+            
             return false;
         }
     }

@@ -16,7 +16,7 @@ public class RoomDecider : MonoBehaviour
     [Serialize]
     public RoomContract[] possibleContracts;
     
-    private System.Random random;
+    public System.Random random;
 
     public void CreateNewSeed()
     {
@@ -42,7 +42,7 @@ public class RoomDecider : MonoBehaviour
         if (!HasRoomPool()) return Array.Empty<RoomDefinition>();
 
         var roomsClone = ((RoomDefinition[])Rooms.Clone()).ToList();
-        Shuffler.Shuffle(roomsClone);
+        Shuffler.Shuffle(roomsClone, random);
 
         return roomsClone.ToArray();
     }
@@ -55,21 +55,31 @@ public class RoomDecider : MonoBehaviour
     
     bool ChooseNewContract()
     {
-        contractQualifaction.Add(new ContractQualificator(this));
-        if (contractQualifaction[contractQualifaction.Count - 1].ChooseNewContract())
+        var qualifier = new ContractQualificator(this);
+
+        if (!qualifier.ChooseNewContract())
+            return false;
+
+        contractQualifaction.Add(qualifier);
+        return true;
+        
+    }
+
+    private bool TryGetCurrentContract(out ContractQualificator qualifier)
+    {
+        qualifier = null;
+
+        if (contractQualifaction == null ||
+            RoomGenerator.Instance == null ||
+            RoomGenerator.Instance.contractNumber < 0 ||
+            RoomGenerator.Instance.contractNumber >= contractQualifaction.Count)
         {
-            if(contractQualifaction.Count() == 1)
-            {
-                RoomGenerator.Instance.contractNumber++;
-            }
-            
-            
-            return true;
-        } else
-        {
+            Debug.LogError("No valid contract is available.", this);
             return false;
         }
-        
+
+        qualifier = contractQualifaction[RoomGenerator.Instance.contractNumber];
+        return qualifier != null && qualifier.qualifiedRooms != null;
     }
 
     /*
@@ -84,26 +94,29 @@ public class RoomDecider : MonoBehaviour
 
     public RoomDefinition[] ContractStepCandidates(int step)
     {
-        if(RoomGenerator.Instance.contractNumber >= contractQualifaction.Count())
-        {
-            Debug.Log($"Neexistuje contract pro {RoomGenerator.Instance.contractNumber} ve vygenerovanych contractech");
-        }
-        return contractQualifaction[RoomGenerator.Instance.contractNumber].qualifiedRooms[step].ToArray();
+        if (!TryGetCurrentContract(out var qualifier) ||
+        step < 0 || step >= qualifier.qualifiedRooms.Count)
+        return Array.Empty<RoomDefinition>();
+
+        return qualifier.qualifiedRooms[step].ToArray();
     }
 
-    public bool CheckContractEnd(int phase)
+   public bool CheckContractEnd(int phase)
     {
-        if(phase >= contractQualifaction[RoomGenerator.Instance.contractNumber].qualifiedRooms.Count)
-        {
-            return ChooseNewContract();
-        }
-        return false;
+        if (!TryGetCurrentContract(out var qualifier))
+            return false;
+
+        if (phase < qualifier.qualifiedRooms.Count)
+            return false;
+
+        RoomGenerator.Instance.contractNumber++;
+        return ChooseNewContract();
     }
+
 
     public int StepRoomCount(int phase)
     {
-
-        return contractQualifaction[RoomGenerator.Instance.contractNumber].contractSteps[phase].getRealCount();
+        return contractQualifaction[RoomGenerator.Instance.contractNumber].roomsPerStep[phase];
     }
     
 

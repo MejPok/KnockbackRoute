@@ -93,8 +93,12 @@ public class RoomGenerator : MonoBehaviour
     {
         if (roomsGenerated >= roomCount) return true;
         
+        int roomsForStep = decider.StepRoomCount(contractPhase);
+        if (roomsForStep <= 0) return false;
+
+        int targetRoomCount = Mathf.Min(roomCount, placer.RoomsPlaced + roomsForStep);
         bool generated = placer.GenerateRoomsUpToCount(
-            decider.ContractStepCandidates(contractPhase), generatedRoomsRoot, decider.StepRoomCount(contractPhase), maxGenerationAttempts);
+            decider.ContractStepCandidates(contractPhase), generatedRoomsRoot, targetRoomCount, maxGenerationAttempts);
 
         roomsGenerated = placer.RoomsPlaced;
 
@@ -106,7 +110,10 @@ public class RoomGenerator : MonoBehaviour
             contractPhase++;
         }
 
-        decider.CheckContractEnd(contractPhase);
+        if (decider.CheckContractEnd(contractPhase))
+        {
+            contractPhase = 0;
+        }
             
         return generated;
     }
@@ -122,10 +129,20 @@ public class RoomGenerator : MonoBehaviour
             $"Could not complete generation after {maxGenerationAttempts} attempts. " +
             $"Rolled back {removedRooms} rooms ({rollbackSections} sections) and will retry from there.", this);
     }
+    public float StepSpawnCD = 0.5f;
+    float timer = 0f;
+    
     void Update()
     {
         if (Keyboard.current.gKey.wasPressedThisFrame)
         {
+            GenerateNextSection();
+        }
+
+        timer += Time.deltaTime;
+        if(timer >= StepSpawnCD)
+        {
+            timer = 0;
             GenerateNextSection();
         }
     }

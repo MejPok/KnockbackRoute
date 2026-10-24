@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoomDefinition
   prefab: {fileID: 7151678231959884325, guid: 7053d2b002868be4185fc7a93d89c965, type: 3}
   tags: []
-  difficulty: 0
+  difficulty: 1
   entry: {fileID: 0}
   exit: {fileID: 0}

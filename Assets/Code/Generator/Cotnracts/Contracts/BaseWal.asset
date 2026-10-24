@@ -15,9 +15,23 @@ MonoBehaviour:
   steps:
   - requiredTag: 
     minimumDifficulty: 0
-    maximumDifficulty: 3
-    Count: 1
+    maximumDifficulty: 1
+    Count: 3
+    minCount: 3
+    maxCount: 4
+    enableRandomCount: 1
+  - requiredTag: 
+    minimumDifficulty: 2
+    maximumDifficulty: 2
+    Count: 3
     minCount: 1
-    maxCount: 1
-    enableRandomCount: 0
+    maxCount: 2
+    enableRandomCount: 1
+  - requiredTag: 
+    minimumDifficulty: 0
+    maximumDifficulty: 2
+    Count: 3
+    minCount: 1
+    maxCount: 4
+    enableRandomCount: 1
   ExpectedDifficulty: 1
