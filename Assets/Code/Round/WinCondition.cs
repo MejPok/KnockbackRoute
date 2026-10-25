@@ -7,6 +7,9 @@ public class WinCondition : MonoBehaviour
         if (collision.collider.CompareTag("Player"))
         {
             SpeedrunTimer.speedrunTimer.StopTiming();
+            SpeedrunTimer.speedrunTimer.GetComponent<WinScreenControl>().PlayerWin();
+
+            
         }
     }
 }

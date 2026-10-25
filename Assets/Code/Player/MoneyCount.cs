@@ -10,6 +10,8 @@ public class MoneyCount : MonoBehaviour
 
     public Transform generator;
 
+    public GameObject Popup;
+
     void Update()
     {
         timerSinceLastNewRoom += Time.deltaTime;
@@ -44,9 +46,12 @@ public class MoneyCount : MonoBehaviour
     {
         int moneyGained = (int)Scoring(timerSinceLastNewRoom);
         Money += moneyGained;
+        PlayerShoot.Instance.GetComponent<BulletInventory>().NormalBulletsCount += moneyGained;
 
         Debug.Log($"enetered room number {newRoomId} in {timerSinceLastNewRoom}s and gained {moneyGained}");
 
+        var popup = Instantiate(Popup, transform.position, Quaternion.identity);
+        popup.GetComponent<TextPopup>().text = "+"+moneyGained;
         timerSinceLastNewRoom = 0;
     }
 

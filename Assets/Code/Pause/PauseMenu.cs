@@ -11,11 +11,11 @@ public class PauseMenu : MonoBehaviour
     public bool Paused;
 
     public TextMeshProUGUI seedText;
-    public InputField inputField;
+    public TMP_InputField input;
 
     public void ReloadSceneWithNewSeed()
     {
-        PlayerPrefs.SetInt("seed", int.Parse(inputField.text));
+        PlayerPrefs.SetInt("seed", int.Parse(input.text));
         PlayerPrefs.SetInt("useLoadedSeed", 1);
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

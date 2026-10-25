@@ -20,8 +20,18 @@ public class RoomDecider : MonoBehaviour
 
     public void CreateNewSeed()
     {
-        CurrentSeed = createSeedOnStart ? Environment.TickCount : seed;
-        seed = CurrentSeed;
+        if(PlayerPrefs.GetInt("useLoadedSeed") == 0)
+        {
+            CurrentSeed = createSeedOnStart ? Environment.TickCount : seed;
+             seed = CurrentSeed;
+        } else
+        {
+            CurrentSeed = PlayerPrefs.GetInt("seed");
+            seed = CurrentSeed;
+            PlayerPrefs.SetInt("useLoadedSeed", 0);
+            PlayerPrefs.SetInt("seed", 1);
+        }
+        
     }
     void Awake()
     {

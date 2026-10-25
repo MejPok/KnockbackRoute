@@ -50,6 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35a71e55e575cd14295c19e19c22e92f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomFootprint
+  roomId: 0
 --- !u!61 &8338172625131631516
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -152,7 +153,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8515001353573270158}
   - component: {fileID: 1116175881973676985}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -199,7 +200,7 @@ GameObject:
   - component: {fileID: 139529113059382439}
   - component: {fileID: 3109413275920191564}
   - component: {fileID: 1670634865086019616}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -947,7 +948,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2884730235942819583}
   - component: {fileID: 8848236232438306991}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Entry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -993,7 +994,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8951114457266384036}
   - component: {fileID: 298551142308209826}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1040,6 +1041,10 @@ PrefabInstance:
     - target: {fileID: 513724803065344379, guid: daa596e02c621ac43a63db80a8a13656, type: 3}
       propertyPath: m_Name
       value: Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 513724803065344379, guid: daa596e02c621ac43a63db80a8a13656, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 738480816019045976, guid: daa596e02c621ac43a63db80a8a13656, type: 3}
       propertyPath: signalId

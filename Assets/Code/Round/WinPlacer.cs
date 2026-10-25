@@ -7,7 +7,10 @@ public class WinPlacer : MonoBehaviour
     public GameObject winPrefab;
     public void PlaceWinObject(Transform transformEnd)
     {
-        placed = true;
-        var win = Instantiate(winPrefab, transformEnd.position, Quaternion.identity);
+        if(!placed){
+            var win = Instantiate(winPrefab, transformEnd.position, Quaternion.identity);
+            placed = true;
+
+        }
     }
 }

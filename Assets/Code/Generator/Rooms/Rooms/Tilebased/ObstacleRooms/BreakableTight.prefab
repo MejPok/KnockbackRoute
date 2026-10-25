@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35a71e55e575cd14295c19e19c22e92f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomFootprint
+  roomId: 0
 --- !u!61 &6351168900734659697
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -945,6 +946,14 @@ PrefabInstance:
     - target: {fileID: 2884234020134364303, guid: 6285a3377ebd08545adfb94e932344fb, type: 3}
       propertyPath: m_Name
       value: Breakable
+      objectReference: {fileID: 0}
+    - target: {fileID: 2884234020134364303, guid: 6285a3377ebd08545adfb94e932344fb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6513235899397144073, guid: 6285a3377ebd08545adfb94e932344fb, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 9022120824569732434, guid: 6285a3377ebd08545adfb94e932344fb, type: 3}
       propertyPath: m_LocalPosition.x

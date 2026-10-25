@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2425556441351464582}
   - component: {fileID: 5277360973466984466}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Entry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 1440328575594268580}
   - component: {fileID: 5076248813170223601}
   - component: {fileID: 9159660762760779663}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -608,7 +608,7 @@ GameObject:
   - component: {fileID: 6239362809334461314}
   - component: {fileID: 3764697337280386068}
   - component: {fileID: 5826220770166290577}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -729,7 +729,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6828565531573688593}
   - component: {fileID: 1138013527168065217}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -814,6 +814,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35a71e55e575cd14295c19e19c22e92f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomFootprint
+  roomId: 0
 --- !u!61 &2470098201278440435
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -872,6 +873,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door
       objectReference: {fileID: 0}
+    - target: {fileID: 431620591059536929, guid: 0a675719a02c45445aa9894a6daab8c2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 752765386993771418, guid: 0a675719a02c45445aa9894a6daab8c2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 1750211561722749669, guid: 0a675719a02c45445aa9894a6daab8c2, type: 3}
       propertyPath: m_LocalScale.x
       value: 10
@@ -919,6 +928,14 @@ PrefabInstance:
     - target: {fileID: 2510212410171207053, guid: 0a675719a02c45445aa9894a6daab8c2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5007716929961023630, guid: 0a675719a02c45445aa9894a6daab8c2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5473724383509851544, guid: 0a675719a02c45445aa9894a6daab8c2, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5915224914413273394, guid: 0a675719a02c45445aa9894a6daab8c2, type: 3}
       propertyPath: m_LocalPosition.x
