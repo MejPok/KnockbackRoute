@@ -8,3 +8,6 @@ Hold E to hook.
 Press ESC to pause or change map.
 
 Bugs are common feature of this game, if u get stuck or the level is impossible go into ESC menu and choose different seed.
+
+I used UNITY to create this game, I focused on the code and let the visual style be bare. The thing I had the biggest issue while developing was the room generation, as even now it still hgas issues. But once fixed it will be able to make the game much more interesting and scalable.
+If u have too much lag, Im sorry, my code writing quality isnt highest, and backtracking generating dungeon isnt the lightest on the computer.
