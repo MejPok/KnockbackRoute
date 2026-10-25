@@ -7,11 +7,11 @@ public class SignalManager
 {
     public static int signalId;
     public static event SignalHandler NewSignalTriggered;
-    public delegate void SignalHandler(int e);
+    public delegate void SignalHandler(string possible,int e);
 
-    public static void NewSignal(int id)
+    public static void NewSignal(string possible, int id)
     {
-        NewSignalTriggered.Invoke(id);
+        NewSignalTriggered.Invoke(possible,id);
     }
 
 }
@@ -21,16 +21,24 @@ public static class SignalIdGiver
     private static int nextId = 1;
     private static readonly Dictionary<string, int> waiting = new();
 
-    public static int GetId(string kind)
+    public static List<SignalPairing> signalPairs = new List<SignalPairing>();
+
+
+    public static int GetId(SignalPairing unit)
     {
-        if (waiting.TryGetValue(kind, out int id))
+
+        int sameTypeCount = 0;
+        for(int i = 0; i < signalPairs.Count; i++)
         {
-            waiting.Remove(kind); // This ID has now been given to two callers.
-            return id;
+            if(signalPairs[i].possibleSignalId == unit.possibleSignalId)
+            {
+                sameTypeCount++;
+            }
         }
 
-        id = nextId++;
-        waiting[kind] = id;
-        return id;
+        int newId = (int)(sameTypeCount / 2);
+        signalPairs.Add(unit);
+        return newId;
+
     }
 }

@@ -21,15 +21,17 @@ public class RoomPlacer : MonoBehaviour
     // Retained per depth so later calls can revisit choices from earlier sections.
     private readonly List<CandidateFrame> generationFrames = new List<CandidateFrame>();
     private CandidateFrame startFrame;
-    private RoomConnector lastExit;
+    public RoomConnector lastExit;
     private Transform lastRoom;
 
     public int RoomsPlaced => roomRoot != null ? roomRoot.childCount : 0;
 
-    public bool GenerateRoomsUpToCount(RoomDefinition[] candidates, Transform root, int targetRoomCount, int maxAttempts)
+    public bool GenerateRoomsUpToCount(RoomDefinition[] candidates, Transform root, int targetRoomCount,
+        int maxAttempts, int minimumRoomCountToKeep)
     {
         roomRoot = root;
         if (roomRoot == null || targetRoomCount <= 0) return false;
+        minimumRoomCountToKeep = Mathf.Clamp(minimumRoomCountToKeep, 1, roomRoot.childCount);
         if (roomRoot.childCount >= targetRoomCount) return true;
 
         if (!CanGenerate(candidates)) return false;
@@ -38,12 +40,11 @@ public class RoomPlacer : MonoBehaviour
         while (HasMoreRoomsToPlace(targetRoomCount) && attemptsRemaining > 0)
         {
             if (TryPlaceAtCurrentDepth(candidates, targetRoomCount, ref attemptsRemaining)) continue;
-            if (attemptsRemaining == 0 || !BacktrackFromCurrentDepth()) break;
+            if (attemptsRemaining == 0 || !BacktrackFromCurrentDepth(minimumRoomCountToKeep)) break;
         }
 
         return HasReachedTarget(targetRoomCount);
     }
-
     private bool CanGenerate(RoomDefinition[] candidates)
     {
         return lastExit != null && lastRoom != null && candidates != null && candidates.Length > 0;
@@ -111,17 +112,16 @@ public class RoomPlacer : MonoBehaviour
 
     
 
-    private bool BacktrackFromCurrentDepth()
+    private bool BacktrackFromCurrentDepth(int minimumRoomCountToKeep)
     {
-        int depth = roomRoot.childCount - 1;
-        if (roomRoot.childCount <= 1)
-            return TryNextStartRoom();
+        if (roomRoot.childCount <= minimumRoomCountToKeep)
+            return false;
 
+        int depth = roomRoot.childCount - 1;
         RemoveExhaustedFrame(depth);
         RemoveLastRoom();
         return true;
     }
-
     private bool TryNextStartRoom()
     {
         if (roomRoot.childCount == 0) return false;

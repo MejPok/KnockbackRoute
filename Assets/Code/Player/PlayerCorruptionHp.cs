@@ -52,6 +52,11 @@ public class PlayerCorruptionHp : MonoBehaviour
     public void DealDamage(int damage)
     {
         Hp -= damage;
+
+        if(Hp <= 0)
+        {
+            RespawnScreen.Instance.PlayerDead();
+        }
         
     }
 

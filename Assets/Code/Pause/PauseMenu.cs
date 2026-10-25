@@ -1,11 +1,25 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
     public GameObject escPanel;
 
     public bool Paused;
+
+    public TextMeshProUGUI seedText;
+    public InputField inputField;
+
+    public void ReloadSceneWithNewSeed()
+    {
+        PlayerPrefs.SetInt("seed", int.Parse(inputField.text));
+        PlayerPrefs.SetInt("useLoadedSeed", 1);
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 
     void Update()
     {
@@ -25,10 +39,14 @@ public class PauseMenu : MonoBehaviour
         
         escPanel.SetActive(Paused);
 
+        seedText.text = "Current Seed: " + RoomGenerator.Instance.gameObject.GetComponent<RoomDecider>().CurrentSeed;
+
     }
 
     public void ReDoTutorial()
     {
         GetComponent<Tutorial>().ResetTutorial();
     }
+
+
 }

@@ -15,7 +15,7 @@ public class PlayerHook : MonoBehaviour
     private LineRenderer ropeLine;
     private Vector2 hookPoint;
     private float ropeLength;
-    private bool isHooked;
+    public bool isHooked;
 
     private void Awake()
     {

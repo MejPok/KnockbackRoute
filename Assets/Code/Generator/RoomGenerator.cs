@@ -27,6 +27,21 @@ public class RoomGenerator : MonoBehaviour
     RoomDecider decider;
     RoomPlacer placer;
 
+    private struct GeneratedSection
+    {
+        public int roomCount;
+        public int contractNumber;
+        public int contractPhase;
+
+        public GeneratedSection(int roomCount, int contractNumber, int contractPhase)
+        {
+            this.roomCount = roomCount;
+            this.contractNumber = contractNumber;
+            this.contractPhase = contractPhase;
+        }
+    }
+
+    private readonly List<GeneratedSection> generatedSections = new List<GeneratedSection>();
     void Awake()
     {
         Instance = this;
@@ -44,11 +59,12 @@ public class RoomGenerator : MonoBehaviour
 
         roomsGenerated = 0;
         requestedRoomCount = 0;
+        contractNumber = 0;
+        contractPhase = 0;
+        generatedSections.Clear();
 
         GenerateFirstRoom();
-
     }
-
     void CreateGeneratedRoot()
     {
         if (generatedRoomsRoot == null)
@@ -77,13 +93,25 @@ public class RoomGenerator : MonoBehaviour
         if (requestedRoomCount <= roomsGenerated)
             requestedRoomCount = Mathf.Min(roomCount, roomsGenerated + Mathf.Max(1, GenerateRoomsAhead));
 
+        int startingRoomCount = placer.RoomsPlaced;
+        int startingContractNumber = contractNumber;
+        int startingContractPhase = contractPhase;
+        int minimumRoomsToKeep = GetRollbackBoundary(out int firstSectionToKeep);
+
         bool generated = placer.GenerateRoomsUpToCount(
-            decider.GetRandomRoomCandidates(), generatedRoomsRoot, requestedRoomCount, maxGenerationAttempts);
+            decider.GetRandomRoomCandidates(), generatedRoomsRoot, requestedRoomCount,
+            maxGenerationAttempts, minimumRoomsToKeep);
 
         roomsGenerated = placer.RoomsPlaced;
         if (!generated)
-            RollbackFailedSection();
-        return generated;
+        {
+            RollbackFailedSection(minimumRoomsToKeep, firstSectionToKeep);
+            return false;
+        }
+
+        generatedSections.Add(new GeneratedSection(
+            roomsGenerated - startingRoomCount, startingContractNumber, startingContractPhase));
+        return true;
     }
 
     public int contractNumber;
@@ -92,52 +120,66 @@ public class RoomGenerator : MonoBehaviour
     public bool GenerateNextSection()
     {
         if (roomsGenerated >= roomCount) return true;
-        
+
         int roomsForStep = decider.StepRoomCount(contractPhase);
         if (roomsForStep <= 0) return false;
 
-        int targetRoomCount = Mathf.Min(roomCount, placer.RoomsPlaced + roomsForStep);
+        int startingRoomCount = placer.RoomsPlaced;
+        int startingContractNumber = contractNumber;
+        int startingContractPhase = contractPhase;
+        int minimumRoomsToKeep = GetRollbackBoundary(out int firstSectionToKeep);
+        int targetRoomCount = Mathf.Min(roomCount, startingRoomCount + roomsForStep);
         bool generated = placer.GenerateRoomsUpToCount(
-            decider.ContractStepCandidates(contractPhase), generatedRoomsRoot, targetRoomCount, maxGenerationAttempts);
+            decider.ContractStepCandidates(contractPhase), generatedRoomsRoot, targetRoomCount,
+            maxGenerationAttempts, minimumRoomsToKeep);
 
         roomsGenerated = placer.RoomsPlaced;
-
         if (!generated)
         {
-            RollbackFailedSection();
-        } else
-        {
-            roomsEachSection.Add(roomsForStep);
-            contractPhase++;
+            RollbackFailedSection(minimumRoomsToKeep, firstSectionToKeep);
+            return false;
         }
+
+        generatedSections.Add(new GeneratedSection(
+            roomsGenerated - startingRoomCount, startingContractNumber, startingContractPhase));
+        contractPhase++;
 
         if (decider.CheckContractEnd(contractPhase))
-        {
             contractPhase = 0;
-        }
-            
-        return generated;
+
+        return true;
     }
 
-    List<int> roomsEachSection = new List<int>();
-    private void RollbackFailedSection()
+    private int GetRollbackBoundary(out int firstSectionToKeep)
     {
+        firstSectionToKeep = Mathf.Max(0, generatedSections.Count - Mathf.Max(1, rollbackSections));
+        int minimumRoomsToKeep = 1;
+        for (int i = 0; i < firstSectionToKeep; i++)
+            minimumRoomsToKeep += generatedSections[i].roomCount;
 
-        int roomsToRollback = 0;
-        int stopbounds = roomsEachSection.Count - rollbackSections;
-        for(int i = roomsEachSection.Count - 1; i >= stopbounds; i--)
+        return Mathf.Min(minimumRoomsToKeep, placer.RoomsPlaced);
+    }
+
+    private void RollbackFailedSection(int minimumRoomsToKeep, int firstSectionToKeep)
+    {
+        int roomsToRemove = Mathf.Max(0, placer.RoomsPlaced - minimumRoomsToKeep);
+        int removedRooms = placer.RollbackLastRooms(roomsToRemove);
+        int removedSections = generatedSections.Count - firstSectionToKeep;
+
+        if (removedSections > 0)
         {
-            roomsToRollback += roomsEachSection[i];
-            roomsEachSection.RemoveAt(i);
+            GeneratedSection firstRemoved = generatedSections[firstSectionToKeep];
+            contractNumber = firstRemoved.contractNumber;
+            contractPhase = firstRemoved.contractPhase;
+            generatedSections.RemoveRange(firstSectionToKeep, removedSections);
         }
 
-
-        int removedRooms = placer.RollbackLastRooms(roomsToRollback);
         roomsGenerated = placer.RoomsPlaced;
+        requestedRoomCount = roomsGenerated;
 
         Debug.LogWarning(
             $"Could not complete generation after {maxGenerationAttempts} attempts. " +
-            $"Rolled back {removedRooms} rooms ({rollbackSections} sections) and will retry from there.", this);
+            $"Rolled back {removedRooms} rooms across {removedSections} sections; retrying from the preserved map.", this);
     }
     public float StepSpawnCD = 0.5f;
     float timer = 0f;
@@ -154,6 +196,11 @@ public class RoomGenerator : MonoBehaviour
         {
             timer = 0;
             GenerateNextSection();
+        }
+
+        if(roomsGenerated == roomCount)
+        {
+            GetComponent<WinPlacer>().PlaceWinObject(placer.lastExit.transform); 
         }
     }
 }

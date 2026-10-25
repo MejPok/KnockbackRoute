@@ -20,30 +20,31 @@ public class SignalPairing : MonoBehaviour
             return;
         }
 
-        timer += Time.deltaTime;
-        if(timer >= timeUntilGetId)
-        {
-            GetSignalId();
-            SignalManager.NewSignalTriggered += OnInvoked;
+        GetSignalId();
+        SignalManager.NewSignalTriggered += OnInvoked;
 
-        }
+        
     }
-    public void OnInvoked(int id)
+    public void OnInvoked(string possible,int id)
     {
-        if(id == assignedId)
+        if(id == assignedId && possible == possibleSignalId)
         {
             onInvokeEvents.Invoke();   
-            
         }
     }
 
     public void InvokeSignal()
     {
-        SignalManager.NewSignal(assignedId);
+        SignalManager.NewSignal(possibleSignalId, assignedId);
     }
 
     public void GetSignalId()
     {
-        assignedId = SignalIdGiver.GetId(possibleSignalId);
+        assignedId = SignalIdGiver.GetId(this);
+    }
+
+    void OnDestroy()
+    {
+        SignalIdGiver.signalPairs.Remove(this);
     }
 }

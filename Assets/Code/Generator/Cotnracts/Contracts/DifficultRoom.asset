@@ -15,7 +15,7 @@ MonoBehaviour:
   steps:
   - requiredTag: 
     minimumDifficulty: 0
-    maximumDifficulty: 5
+    maximumDifficulty: 3
     Count: 0
     minCount: 1
     maxCount: 3

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RoomFootprint : MonoBehaviour
 {
+    public int roomId;
+    
     public BoxCollider2D[] boxColliders { get
         {
             return GetComponents<BoxCollider2D>();

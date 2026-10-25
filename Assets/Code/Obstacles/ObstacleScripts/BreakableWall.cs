@@ -5,11 +5,11 @@ public class BreakableWall : MonoBehaviour
 {
     public float speedThreshold;
 
-    TextMeshProUGUI speedText;
+    TextMeshPro speedText;
 
     void Start()
     {
-        speedText = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        speedText = transform.GetChild(0).GetComponent<TextMeshPro>();
         speedText.text = speedThreshold + "";
     }
     void OnCollisionEnter2D(Collision2D collision)
