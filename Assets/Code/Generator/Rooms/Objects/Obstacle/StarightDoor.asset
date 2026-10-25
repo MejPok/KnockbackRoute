@@ -16,6 +16,6 @@ MonoBehaviour:
   tags:
   - Door
   - Special
-  difficulty: 0
+  difficulty: 4
   entry: {fileID: 0}
   exit: {fileID: 0}

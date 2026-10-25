@@ -14,23 +14,6 @@ public class ButtonDoor : MonoBehaviour
 
     public bool open;
 
-    void OnEnable()
-    {
-        RoomSignalBus.Subscribe(signalId, OpenDoor);
-    }
-
-    void OnDisable()
-    {
-        RoomSignalBus.Unsubscribe(signalId, OpenDoor);
-    }
-
-    public void SetSignalId(string newSignalId)
-    {
-        RoomSignalBus.Unsubscribe(signalId, OpenDoor);
-        signalId = newSignalId;
-        if (isActiveAndEnabled) RoomSignalBus.Subscribe(signalId, OpenDoor);
-    }
-
     public void OpenDoor()
     {
         if (OpenPosition == null || ClosedPosition == null)

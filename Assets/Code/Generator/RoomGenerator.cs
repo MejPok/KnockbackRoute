@@ -107,6 +107,7 @@ public class RoomGenerator : MonoBehaviour
             RollbackFailedSection();
         } else
         {
+            roomsEachSection.Add(roomsForStep);
             contractPhase++;
         }
 
@@ -118,10 +119,19 @@ public class RoomGenerator : MonoBehaviour
         return generated;
     }
 
+    List<int> roomsEachSection = new List<int>();
     private void RollbackFailedSection()
     {
-        int roomsPerSection = Mathf.Max(1, GenerateRoomsAhead);
-        int roomsToRollback = roomsPerSection * rollbackSections;
+
+        int roomsToRollback = 0;
+        int stopbounds = roomsEachSection.Count - rollbackSections;
+        for(int i = roomsEachSection.Count - 1; i >= stopbounds; i--)
+        {
+            roomsToRollback += roomsEachSection[i];
+            roomsEachSection.RemoveAt(i);
+        }
+
+
         int removedRooms = placer.RollbackLastRooms(roomsToRollback);
         roomsGenerated = placer.RoomsPlaced;
 

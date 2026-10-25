@@ -18,6 +18,7 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField, Min(0f)] float velocityBoostPerShot = 1f;
     [SerializeField, Range(0f, 1f)] float nearMaxSpeedThreshold = 0.9f;
 
+    public Vector2 lastVelocity;
     BulletInventory bulletInventory;
 
     Rigidbody2D rb;
@@ -117,6 +118,8 @@ public class PlayerShoot : MonoBehaviour
         {
             rb.linearVelocity = Vector2.ClampMagnitude(rb.linearVelocity, currentMaxVelocity);
         }
+
+        lastVelocity = rb.linearVelocity;
 
     }
 

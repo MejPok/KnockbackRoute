@@ -118,9 +118,6 @@ public class RoomDecider : MonoBehaviour
     {
         return contractQualifaction[RoomGenerator.Instance.contractNumber].roomsPerStep[phase];
     }
-    
-
-
 
 
     #nullable enable

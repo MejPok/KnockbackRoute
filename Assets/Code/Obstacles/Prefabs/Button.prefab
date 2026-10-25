@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3122548061628708691}
   - component: {fileID: 883935803389654013}
   - component: {fileID: 738480816019045976}
+  - component: {fileID: -3146906831647424304}
   m_Layer: 0
   m_Name: Button
   m_TagString: Untagged
@@ -152,3 +153,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonBullet
   buttonDoor: {fileID: 0}
+  signalId: 
+--- !u!114 &-3146906831647424304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 513724803065344379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 741d3045205cb0b44ae74fdbde2fd145, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SignalPairing
+  possibleSignalId: BasicDoor
+  assignedId: -1
+  onInvokeEvents:
+    m_PersistentCalls:
+      m_Calls: []
+  timeUntilGetId: 1

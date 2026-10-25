@@ -6,6 +6,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject escPanel;
 
     public bool Paused;
+
     void Update()
     {
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
@@ -23,5 +24,11 @@ public class PauseMenu : MonoBehaviour
         }
         
         escPanel.SetActive(Paused);
+
+    }
+
+    public void ReDoTutorial()
+    {
+        GetComponent<Tutorial>().ResetTutorial();
     }
 }

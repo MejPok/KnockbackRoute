@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2510212410171207053}
   - component: {fileID: 8991966404632820758}
+  - component: {fileID: -7296766615117575660}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -52,8 +53,38 @@ MonoBehaviour:
   ClosedPosition: {fileID: 745731649561503173}
   moveSpeed: 2
   openDuration: 1
-  signalId: ""
+  signalId: 
   open: 0
+--- !u!114 &-7296766615117575660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431620591059536929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 741d3045205cb0b44ae74fdbde2fd145, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SignalPairing
+  possibleSignalId: BasicDoor
+  assignedId: -1
+  onInvokeEvents:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8991966404632820758}
+        m_TargetAssemblyTypeName: ButtonDoor, Assembly-CSharp
+        m_MethodName: OpenDoor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  timeUntilGetId: 1
 --- !u!1 &752765386993771418
 GameObject:
   m_ObjectHideFlags: 0

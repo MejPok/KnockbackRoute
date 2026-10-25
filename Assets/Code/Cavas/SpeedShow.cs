@@ -33,6 +33,6 @@ public class SpeedShow : MonoBehaviour
         speedSlider.value = player.GetComponent<Rigidbody2D>().linearVelocity.magnitude;
         speedSlider.minValue = 0;
 
-        speedText.text = "" + player.GetComponent<Rigidbody2D>().linearVelocity.magnitude;
+        speedText.text = "" + (int)player.GetComponent<Rigidbody2D>().linearVelocity.magnitude;
     }
 }
