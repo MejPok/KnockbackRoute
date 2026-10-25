@@ -16,8 +16,9 @@ public class TextPopup : MonoBehaviour
         timer += Time.deltaTime;
 
         transform.position = new Vector2(transform.position.x, transform.position.y + speed * Time.deltaTime);
-        textObject.color = new Color(1,1,1,1 - timer/time);
+        Color newColor = new Color(1,1,1,1 - timer/time);
 
+        textObject.color = newColor;
         textObject.text = text;
 
     }

@@ -1293,7 +1293,7 @@ MonoBehaviour:
   generateOnStart: 1
   contractNumber: 0
   contractPhase: 0
-  StepSpawnCD: 0.5
+  StepSpawnCD: 0.1
 --- !u!4 &140988283
 Transform:
   m_ObjectHideFlags: 0
@@ -6432,6 +6432,7 @@ MonoBehaviour:
   Money: 0
   lastEnteredRoom: 0
   generator: {fileID: 140988283}
+  Popup: {fileID: 1479995815455918232, guid: 86e084cd3b99a0944b1c8c8fc81c4262, type: 3}
 --- !u!1 &1302991890
 GameObject:
   m_ObjectHideFlags: 0

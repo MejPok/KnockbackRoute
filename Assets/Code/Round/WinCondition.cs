@@ -8,8 +8,7 @@ public class WinCondition : MonoBehaviour
         {
             SpeedrunTimer.speedrunTimer.StopTiming();
             SpeedrunTimer.speedrunTimer.GetComponent<WinScreenControl>().PlayerWin();
-
-            
+            Debug.Log(SpeedrunTimer.speedrunTimer.Timer + "s the run is completed, Congrats");
         }
     }
 }
