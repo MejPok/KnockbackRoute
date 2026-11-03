@@ -716,12 +716,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7636a1b139736d74c9e9a8844a65d9fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomGenerator
-  roomCount: 40
+  roomCount: 100
   roomsGenerated: 0
   generatedRoomsRoot: {fileID: 0}
   maxGenerationAttempts: 1000
   GenerateRoomsAhead: 5
-  rollbackSections: 3
+  rollbackSections: 1
   generateOnStart: 1
   contractNumber: 0
   contractPhase: 0

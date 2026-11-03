@@ -27,23 +27,7 @@ public static class SignalIdGiver
     {
         WaitingForId.Add(unit);
     }
-    public static int GetId(SignalPairing unit)
-    {
 
-        int sameTypeCount = 0;
-        for(int i = 0; i < signalPairs.Count; i++)
-        {
-            if(signalPairs[i].possibleSignalId == unit.possibleSignalId)
-            {
-                sameTypeCount++;
-            }
-        }
-
-        int newId = (int)(sameTypeCount / 2);
-        signalPairs.Add(unit);
-        return newId;
-
-    }
 
     public static void StartAssigning()
     {
@@ -57,11 +41,14 @@ public static class SignalIdGiver
             {
                 signalPairs.Add(unit);
                 unit.assignedId = assigningTypeCount[unit.possibleSignalId] / 2;
-                assigningTypeCount[unit.possibleSignalId]++;
                 Debug.Log($"Assigned ID {unit.assignedId} to signal {unit.possibleSignalId}");
+                assigningTypeCount[unit.possibleSignalId]++;
             }
             else
             {
+                signalPairs.Add(unit);
+                unit.assignedId = 0;
+                Debug.Log($"Assigned ID {unit.assignedId} to signal {unit.possibleSignalId}");
                 assigningTypeCount[unit.possibleSignalId] = 1;
             }
         }

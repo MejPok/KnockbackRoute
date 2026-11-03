@@ -106,10 +106,12 @@ public class RoomDecider : MonoBehaviour
     public RoomDefinition[] ContractStepCandidates(int step)
     {
         if (!TryGetCurrentContract(out var qualifier) ||
-        step < 0 || step >= qualifier.qualifiedRooms.Count)
-        return Array.Empty<RoomDefinition>();
+            step < 0 || step >= qualifier.qualifiedRooms.Count)
+            return Array.Empty<RoomDefinition>();
 
-        return qualifier.qualifiedRooms[step].ToArray();
+        var candidates = qualifier.qualifiedRooms[step].ToList();
+        Shuffler.Shuffle(candidates, random);
+        return candidates.ToArray();
     }
 
    public bool CheckContractEnd(int phase)

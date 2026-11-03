@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoomContract
   steps:
   - requiredTag: Button
-    minimumDifficulty: 0
+    minimumDifficulty: 5
     maximumDifficulty: 5
     Count: 0
     minCount: 1
@@ -22,16 +22,16 @@ MonoBehaviour:
     enableRandomCount: 0
   - requiredTag: 
     minimumDifficulty: 0
-    maximumDifficulty: 5
+    maximumDifficulty: 4
     Count: 0
     minCount: 1
     maxCount: 4
     enableRandomCount: 1
   - requiredTag: Door
-    minimumDifficulty: 0
+    minimumDifficulty: 5
     maximumDifficulty: 5
     Count: 0
     minCount: 1
     maxCount: 1
     enableRandomCount: 0
-  ExpectedDifficulty: 0
+  ExpectedDifficulty: 1

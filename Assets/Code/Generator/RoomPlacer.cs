@@ -14,6 +14,16 @@ public class RoomPlacer : MonoBehaviour
         {
             candidates = new List<RoomDefinition>(source);
         }
+
+        public bool Matches(RoomDefinition[] source)
+        {
+            if (source == null || candidates.Count != source.Length) return false;
+
+            for (int i = 0; i < source.Length; i++)
+                if (!ReferenceEquals(candidates[i], source[i])) return false;
+
+            return true;
+        }
     }
 
     private Transform roomRoot;
@@ -31,6 +41,7 @@ public class RoomPlacer : MonoBehaviour
     {
         roomRoot = root;
         if (roomRoot == null || targetRoomCount <= 0) return false;
+
         minimumRoomCountToKeep = Mathf.Clamp(minimumRoomCountToKeep, 1, roomRoot.childCount);
         if (roomRoot.childCount >= targetRoomCount) return true;
 
@@ -71,9 +82,13 @@ public class RoomPlacer : MonoBehaviour
         int depth = roomRoot.childCount - 1;
         if (generationFrames.Count == depth)
             generationFrames.Add(new CandidateFrame(candidates));
+        else if (!generationFrames[depth].Matches(candidates))
+            generationFrames[depth] = new CandidateFrame(candidates);
+
         return generationFrames[depth];
     }
 
+    // Tries to place the next candidate room at the current depth. If successful, it checks if a valid continuation exists for the next few rooms. If not, it backtracks and tries the next candidate.
     private bool TryPlaceNextCandidate(CandidateFrame frame, int targetRoomCount, RoomDefinition[] candidates,
         ref int attemptsRemaining)
     {
@@ -193,9 +208,11 @@ public class RoomPlacer : MonoBehaviour
 
     public int RollbackLastRooms(int roomCount)
     {
-        if (roomRoot == null || roomRoot.childCount <= 1) return 0;
+        if (roomRoot == null) return 0;
 
-        int roomsToRemove = Mathf.Min(Mathf.Max(0, roomCount), roomRoot.childCount - 1);
+        int roomsToRemove = roomRoot.childCount > 1
+            ? Mathf.Min(Mathf.Max(0, roomCount), roomRoot.childCount - 1)
+            : 0;
         for (int i = 0; i < roomsToRemove; i++)
             RemoveLastRoom();
 
@@ -206,7 +223,7 @@ public class RoomPlacer : MonoBehaviour
     private void KeepChoicesAtCurrentEnd()
     {
         int nextRoomDepth = roomRoot.childCount - 1;
-        while (generationFrames.Count > nextRoomDepth + 1)
+        while (generationFrames.Count > nextRoomDepth)
             generationFrames.RemoveAt(generationFrames.Count - 1);
     }
 
@@ -224,6 +241,15 @@ public class RoomPlacer : MonoBehaviour
         lastExit = FindConnector(lastRoom.gameObject, RoomConnector.ConnectionType.Exit);
     }
 
+    /*  
+    public void GenerateFirstRoom(RoomDefinition candidates, Transform root)
+    {
+        roomRoot = root;
+        ResetPlacementState();
+        startFrame = new CandidateFrame(new RoomDefinition[] { candidates });
+        TryPlaceStartCandidate();
+    }
+    */
     public bool PlaceFirstRoom(RoomDefinition candidates, Transform root)
     {
         RoomDefinition[] candidateArray = candidates != null

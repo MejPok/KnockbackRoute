@@ -9,15 +9,16 @@ public class SignalPairing : MonoBehaviour
     public UnityEvent onInvokeEvents;
     public Action signalActionEvent;
 
-    float timer;
-    public float timeUntilGetId = 1f;
-
-    bool waitingForId = true;
+    bool waitingForId = false;
 
     void Update()
     {
-        GetSignalId();
-        SignalManager.NewSignalTriggered += OnInvoked;
+        if (!waitingForId)
+        {
+            GetSignalId();
+            SignalManager.NewSignalTriggered += OnInvoked;
+
+        }
         
     }
     public void OnInvoked(string possible,int id)
@@ -41,6 +42,7 @@ public class SignalPairing : MonoBehaviour
 
     void OnDestroy()
     {
+        SignalManager.NewSignalTriggered -= OnInvoked;
         SignalIdGiver.WaitingForId.Remove(this);
         SignalIdGiver.signalPairs.Remove(this);
     }
