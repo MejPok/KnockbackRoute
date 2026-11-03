@@ -10,8 +10,9 @@ using UnityEngine.InputSystem;
 public class RoomGenerator : MonoBehaviour
 {
     public static RoomGenerator Instance;
-    [SerializeField, Min(1)] private int roomCount = 40;
-    [SerializeField] private int roomsGenerated;
+    
+    public int roomCount = 40;
+    public int roomsGenerated = 0;
     [SerializeField] public Transform generatedRoomsRoot;
     [SerializeField, Min(1)] private int maxGenerationAttempts = 2000;
 
@@ -77,7 +78,7 @@ public class RoomGenerator : MonoBehaviour
 
     public void GenerateFirstRoom()
     {
-        bool placed = placer.PlaceFirstRoom(decider.GetRandomRoomCandidates(), generatedRoomsRoot);
+        bool placed = placer.PlaceFirstRoom(decider.GetRandomRoomCandidates()[0], generatedRoomsRoot);
 
         roomsGenerated = placer.RoomsPlaced;
         requestedRoomCount = roomsGenerated;
@@ -89,6 +90,7 @@ public class RoomGenerator : MonoBehaviour
     /// <summary>Generate the next rooms during gameplay. Call this when the player is nearing the end of the current section.</summary>
     public bool GenerateNextRandomSection()
     {
+        if (placer == null || placer.RoomsPlaced == 0) return false;
         if (requestedRoomCount >= roomCount && roomsGenerated >= roomCount) return true;
         if (requestedRoomCount <= roomsGenerated)
             requestedRoomCount = Mathf.Min(roomCount, roomsGenerated + Mathf.Max(1, GenerateRoomsAhead));
@@ -119,6 +121,7 @@ public class RoomGenerator : MonoBehaviour
 
     public bool GenerateNextSection()
     {
+        if (placer == null || placer.RoomsPlaced == 0) return false;
         if (roomsGenerated >= roomCount) return true;
 
         int roomsForStep = decider.StepRoomCount(contractPhase);
@@ -183,7 +186,9 @@ public class RoomGenerator : MonoBehaviour
     }
     public float StepSpawnCD = 0.5f;
     float timer = 0f;
-    
+
+    bool assignedIds = false;
+
     void Update()
     {
         if (Keyboard.current.gKey.wasPressedThisFrame)
@@ -198,9 +203,24 @@ public class RoomGenerator : MonoBehaviour
             GenerateNextSection();
         }
 
-        if(roomsGenerated == roomCount)
+        if(roomsGenerated >= roomCount)
         {
             GetComponent<WinPlacer>().PlaceWinObject(placer.lastExit.transform); 
+            mapLoadUI.SetActive(false);
+
+            if(assignedIds == false)
+            {
+                SignalIdGiver.StartAssigning();
+                assignedIds = true;
+                Debug.Log("Assigning signal ids");
+            }
         }
+    }
+
+    GameObject mapLoadUI;
+
+    public void SetMapLoadUI(GameObject mapLoadUI)
+    {
+        this.mapLoadUI = mapLoadUI;
     }
 }

@@ -12,17 +12,12 @@ public class SignalPairing : MonoBehaviour
     float timer;
     public float timeUntilGetId = 1f;
 
+    bool waitingForId = true;
 
     void Update()
     {
-        if(assignedId != -1)
-        {
-            return;
-        }
-
         GetSignalId();
         SignalManager.NewSignalTriggered += OnInvoked;
-
         
     }
     public void OnInvoked(string possible,int id)
@@ -40,11 +35,13 @@ public class SignalPairing : MonoBehaviour
 
     public void GetSignalId()
     {
-        assignedId = SignalIdGiver.GetId(this);
+        SignalIdGiver.WaitForId(this);
+        waitingForId = true;
     }
 
     void OnDestroy()
     {
+        SignalIdGiver.WaitingForId.Remove(this);
         SignalIdGiver.signalPairs.Remove(this);
     }
 }

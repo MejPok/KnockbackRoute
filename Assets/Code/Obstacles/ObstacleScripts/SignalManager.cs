@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SignalManager
 {
-    public static int signalId;
     public static event SignalHandler NewSignalTriggered;
     public delegate void SignalHandler(string possible,int e);
 
@@ -21,8 +20,13 @@ public static class SignalIdGiver
     private static readonly Dictionary<string, int> waiting = new();
 
     public static List<SignalPairing> signalPairs = new List<SignalPairing>();
+    public static List<SignalPairing> WaitingForId = new List<SignalPairing>();
 
 
+    public static void WaitForId(SignalPairing unit)
+    {
+        WaitingForId.Add(unit);
+    }
     public static int GetId(SignalPairing unit)
     {
 
@@ -38,6 +42,32 @@ public static class SignalIdGiver
         int newId = (int)(sameTypeCount / 2);
         signalPairs.Add(unit);
         return newId;
+
+    }
+
+    public static void StartAssigning()
+    {
+        Dictionary<string, int> assigningTypeCount = new Dictionary<string, int>();
+
+        foreach (SignalPairing unit in WaitingForId)
+        {
+            if (unit == null) return;
+
+            if (assigningTypeCount.ContainsKey(unit.possibleSignalId))
+            {
+                signalPairs.Add(unit);
+                unit.assignedId = assigningTypeCount[unit.possibleSignalId] / 2;
+                assigningTypeCount[unit.possibleSignalId]++;
+                Debug.Log($"Assigned ID {unit.assignedId} to signal {unit.possibleSignalId}");
+            }
+            else
+            {
+                assigningTypeCount[unit.possibleSignalId] = 1;
+            }
+        }
+
+
+
 
     }
 }

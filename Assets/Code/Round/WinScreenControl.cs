@@ -19,4 +19,10 @@ public class WinScreenControl : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+    public void ReloadScene()
+    {
+        Debug.Log("Reloading scene");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }

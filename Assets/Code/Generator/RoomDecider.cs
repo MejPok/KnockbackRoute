@@ -85,6 +85,7 @@ public class RoomDecider : MonoBehaviour
             RoomGenerator.Instance.contractNumber >= contractQualifaction.Count)
         {
             Debug.LogError("No valid contract is available.", this);
+
             return false;
         }
 

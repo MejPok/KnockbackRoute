@@ -224,6 +224,14 @@ public class RoomPlacer : MonoBehaviour
         lastExit = FindConnector(lastRoom.gameObject, RoomConnector.ConnectionType.Exit);
     }
 
+    public bool PlaceFirstRoom(RoomDefinition candidates, Transform root)
+    {
+        RoomDefinition[] candidateArray = candidates != null
+            ? new RoomDefinition[] { candidates }
+            : System.Array.Empty<RoomDefinition>();
+        return PlaceFirstRoom(candidateArray, root);
+    }
+
     public bool PlaceFirstRoom(RoomDefinition[] candidates, Transform root)
     {
         roomRoot = root;
