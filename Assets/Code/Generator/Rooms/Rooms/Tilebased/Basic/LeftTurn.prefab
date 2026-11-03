@@ -94,6 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35a71e55e575cd14295c19e19c22e92f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomFootprint
+  roomId: 0
 --- !u!61 &8551032003201504023
 BoxCollider2D:
   m_ObjectHideFlags: 0
