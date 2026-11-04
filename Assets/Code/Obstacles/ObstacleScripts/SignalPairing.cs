@@ -9,11 +9,11 @@ public class SignalPairing : MonoBehaviour
     public UnityEvent onInvokeEvents;
     public Action signalActionEvent;
 
-    bool waitingForId = false;
+    public bool waitingForId = false;
 
     void Update()
     {
-        if (!waitingForId)
+        if (!waitingForId && assignedId == -1)
         {
             GetSignalId();
             SignalManager.NewSignalTriggered += OnInvoked;

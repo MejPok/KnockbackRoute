@@ -46,7 +46,24 @@ public class RoomDecider : MonoBehaviour
         Debug.LogError("RoomDecider needs at least one RoomDefinition.", this);
         return false;
     }
-
+    public RoomDefinition GetFirstRoomCandidate()
+    {
+        foreach (RoomDefinition room in Rooms) 
+        {
+            if(room.tags.Count() > 0)
+            {
+                if (room.tags[0] == "SpawnRoom")
+                {
+                    return room;
+                }
+            } else
+            {
+                continue;
+            }
+            
+        }
+        return null;
+    }
     public RoomDefinition[] GetRandomRoomCandidates()
     {
         if (!HasRoomPool()) return Array.Empty<RoomDefinition>();

@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class BreakableWall : MonoBehaviour
@@ -23,6 +24,10 @@ public class BreakableWall : MonoBehaviour
                 if(GetComponent<ParticleHolder>() != null)
                 {
                     GetComponent<ParticleHolder>().useParticle(transform, 0);
+                }
+                if (GetComponent<CinemachineImpulseSource>() != null) 
+                {
+                    GetComponent<CinemachineImpulseSource>().GenerateImpulse();
                 }
 
                 collision.collider.GetComponentInParent<Rigidbody2D>().linearVelocity = shoot.lastVelocity;

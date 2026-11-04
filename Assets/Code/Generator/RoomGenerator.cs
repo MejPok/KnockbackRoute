@@ -84,7 +84,8 @@ public class RoomGenerator : MonoBehaviour
 
     public void GenerateFirstRoom()
     {
-        bool placed = placer.PlaceFirstRoom(decider.GetRandomRoomCandidates(), generatedRoomsRoot);
+        RoomDefinition firstRoomCandidate = decider.GetFirstRoomCandidate();
+        bool placed = placer.PlaceFirstRoom(firstRoomCandidate, generatedRoomsRoot);
 
         roomsGenerated = placer.RoomsPlaced;
         requestedRoomCount = roomsGenerated;
@@ -167,9 +168,11 @@ public class RoomGenerator : MonoBehaviour
         Debug.LogWarning(
             $"Could not complete generation after {maxGenerationAttempts} attempts. " +
             $"Rolled back {removedRooms} rooms across {removedSections} sections; retrying from the preserved map.", this);
+
+        failedRollback++;
         addedRollbackSections = Mathf.Min(addedRollbackSections + 1, maxAddedRollbackSections);
     }
-
+    int failedRollback = 0;
     public float StepSpawnCD = 0.5f;
     float timer = 0f;
 
@@ -186,9 +189,11 @@ public class RoomGenerator : MonoBehaviour
             if(success)
             {
                 successfulRollbacks++;
-                if (successfulRollbacks > addedRollbackSections + 1)
+
+                if (successfulRollbacks > failedRollback)
                 {
                     addedRollbackSections = Mathf.Max(0, addedRollbackSections - 1);
+                    failedRollback = 0;
                     successfulRollbacks = 0;
                 }
             }
@@ -209,7 +214,6 @@ public class RoomGenerator : MonoBehaviour
     }
 
     GameObject mapLoadUI;
-
     public void SetMapLoadUI(GameObject mapLoadUI)
     {
         this.mapLoadUI = mapLoadUI;

@@ -16,8 +16,6 @@ public class SignalManager
 
 public static class SignalIdGiver
 {
-    private static int nextId = 1;
-    private static readonly Dictionary<string, int> waiting = new();
 
     public static List<SignalPairing> signalPairs = new List<SignalPairing>();
     public static List<SignalPairing> WaitingForId = new List<SignalPairing>();
@@ -39,18 +37,19 @@ public static class SignalIdGiver
 
             if (assigningTypeCount.ContainsKey(unit.possibleSignalId))
             {
-                signalPairs.Add(unit);
                 unit.assignedId = assigningTypeCount[unit.possibleSignalId] / 2;
-                Debug.Log($"Assigned ID {unit.assignedId} to signal {unit.possibleSignalId}");
+                unit.waitingForId = false;
                 assigningTypeCount[unit.possibleSignalId]++;
             }
             else
             {
-                signalPairs.Add(unit);
                 unit.assignedId = 0;
-                Debug.Log($"Assigned ID {unit.assignedId} to signal {unit.possibleSignalId}");
+                unit.waitingForId = false;
                 assigningTypeCount[unit.possibleSignalId] = 1;
             }
+
+            signalPairs.Add(unit);
+            Debug.Log($"Assigned ID {unit.assignedId} to signal {unit.possibleSignalId}");
         }
 
 
