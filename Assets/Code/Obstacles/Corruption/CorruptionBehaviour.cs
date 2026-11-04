@@ -19,6 +19,9 @@ public class CorruptionBehaviour : MonoBehaviour
     void Start()
     {
         roomTransform = RoomGenerator.Instance.generatedRoomsRoot;
+
+        RoomGenerator.Instance.corruption = this;
+        gameObject.SetActive(false);
     }
 
     void Update()

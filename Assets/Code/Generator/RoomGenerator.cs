@@ -174,7 +174,7 @@ public class RoomGenerator : MonoBehaviour
     float timer = 0f;
 
     bool assignedIds = false;
-
+    public CorruptionBehaviour corruption;
     void Update()
     {
 
@@ -186,7 +186,7 @@ public class RoomGenerator : MonoBehaviour
             if(success)
             {
                 successfulRollbacks++;
-                if (successfulRollbacks > 5)
+                if (successfulRollbacks > addedRollbackSections + 1)
                 {
                     addedRollbackSections = Mathf.Max(0, addedRollbackSections - 1);
                     successfulRollbacks = 0;
@@ -198,7 +198,7 @@ public class RoomGenerator : MonoBehaviour
         {
             GetComponent<WinPlacer>().PlaceWinObject(placer.lastExit.transform); 
             mapLoadUI.SetActive(false);
-
+            corruption.gameObject.SetActive(true);
             if(assignedIds == false)
             {
                 SignalIdGiver.StartAssigning();

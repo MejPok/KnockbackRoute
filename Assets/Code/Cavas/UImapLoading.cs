@@ -1,11 +1,14 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UImapLoading : MonoBehaviour
 {
     public bool loading = true;
     public TextMeshProUGUI loadingText;
+    public TextMeshProUGUI loadingTextRoomCount;
+
     public Slider loadingSlider;
 
     float timer = 0f;
@@ -42,10 +45,17 @@ public class UImapLoading : MonoBehaviour
         string dots = new string('.', dotCount);
         loadingText.text = "Loading map" + dots;
 
+        loadingTextRoomCount.text = $"{generator.roomsGenerated} / {generator.roomCount} rooms built";
+
         loadingSlider.maxValue = generator.roomCount;
         loadingSlider.minValue = 0;
         loadingSlider.value = generator.roomsGenerated;
 
+        
+    }
 
+    public void RestartGeneration()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
