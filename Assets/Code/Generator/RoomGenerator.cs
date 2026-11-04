@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 /// <summary>Unity entry point for starting and incrementally extending a generated dungeon.</summary>
 [RequireComponent(typeof(RoomDecider))]
@@ -10,7 +8,7 @@ using UnityEngine.InputSystem;
 public class RoomGenerator : MonoBehaviour
 {
     public static RoomGenerator Instance;
-    
+
     public int roomCount = 40;
     public int roomsGenerated = 0;
     [SerializeField] public Transform generatedRoomsRoot;
@@ -22,7 +20,7 @@ public class RoomGenerator : MonoBehaviour
     private int originalRollbackSections = 3;
     [Min(1)] private int rollbackSections { get => originalRollbackSections + addedRollbackSections; set => originalRollbackSections = value; }
     public int maxAddedRollbackSections = 10;
-    public int addedRollbackSections = 10;
+    public int addedRollbackSections = 0;
 
     [SerializeField] private bool generateOnStart = true;
     private int requestedRoomCount;
@@ -84,11 +82,28 @@ public class RoomGenerator : MonoBehaviour
 
     public void GenerateFirstRoom()
     {
-        RoomDefinition firstRoomCandidate = decider.GetFirstRoomCandidate();
-        bool placed = placer.PlaceFirstRoom(firstRoomCandidate, generatedRoomsRoot);
+        RoomDefinition firstRoomCandidate = decider.GetRoomCandidateByTag("SpawnRoom");
+
+        bool placed = false;
+        placed = placer.PlaceFirstRoom(firstRoomCandidate, generatedRoomsRoot);
 
         roomsGenerated = placer.RoomsPlaced;
         requestedRoomCount = roomsGenerated;
+
+        if (!placed) Debug.LogError("No eligible starting room could be placed.", this);
+
+    }
+
+    public void GenerateLastRoom()
+    {
+        RoomDefinition lastRoomCandidate = decider.GetRoomCandidateByTag("LastRoom");
+
+        bool placed = false;
+        if (placer.lastExit != null)
+        {
+            placed = placer.PlaceFirstRoom(lastRoomCandidate, placer.lastExit.transform);
+
+        }
 
         if (!placed) Debug.LogError("No eligible starting room could be placed.", this);
 
@@ -136,7 +151,7 @@ public class RoomGenerator : MonoBehaviour
     {
 
         firstSectionToKeep = Mathf.Max(0, generatedSections.Count - Mathf.Max(1, rollbackSections));
-        if(firstSectionToKeep == 0) Debug.LogWarning("Rollback sections exceeds generated sections. Rollback might remove all generated rooms.", this);
+        if (firstSectionToKeep == 0) Debug.LogWarning("Rollback sections exceeds generated sections. Rollback might remove all generated rooms.", this);
 
         int minimumRoomsToKeep = 1;
         for (int i = 0; i < firstSectionToKeep; i++)
@@ -148,7 +163,6 @@ public class RoomGenerator : MonoBehaviour
     int successfulRollbacks = 0;
     private void RollbackFailedSection()
     {
-
         int minimumRoomsToKeep = GetRollbackBoundary(out int firstSectionToKeep);
         int roomsToRemove = Mathf.Max(0, placer.RoomsPlaced - minimumRoomsToKeep);
         int removedRooms = placer.RollbackLastRooms(roomsToRemove);
@@ -169,47 +183,60 @@ public class RoomGenerator : MonoBehaviour
             $"Could not complete generation after {maxGenerationAttempts} attempts. " +
             $"Rolled back {removedRooms} rooms across {removedSections} sections; retrying from the preserved map.", this);
 
-        failedRollback++;
-        addedRollbackSections = Mathf.Min(addedRollbackSections + 1, maxAddedRollbackSections);
+
+
     }
+
+    int lastFailedRoomRollback = 0;
     int failedRollback = 0;
     public float StepSpawnCD = 0.5f;
     float timer = 0f;
 
     bool assignedIds = false;
     public CorruptionBehaviour corruption;
+    bool reachedRoomCount = false;
     void Update()
     {
 
         timer += Time.deltaTime;
-        if(timer >= StepSpawnCD)
+        if (timer >= StepSpawnCD)
         {
             timer = 0;
             bool success = GenerateNextSection();
-            if(success)
+            if (success)
             {
                 successfulRollbacks++;
+            }
+            else
+            {
+                failedRollback++;
+                successfulRollbacks = 0;
+                lastFailedRoomRollback = roomsGenerated;
+            }
+            
+            if (failedRollback >= 10) addedRollbackSections = Mathf.Min(addedRollbackSections + 1, maxAddedRollbackSections);
 
-                if (successfulRollbacks >= failedRollback)
-                {
-                    addedRollbackSections = Mathf.Max(0, addedRollbackSections - 1);
-                    failedRollback = 0;
-                    successfulRollbacks = 0;
-                }
+            if(successfulRollbacks >= rollbackSections)
+            {
+                addedRollbackSections = Mathf.Max(0, addedRollbackSections - 1);
+                failedRollback = 0;
             }
         }
 
-        if(roomsGenerated >= roomCount)
+
+        if (roomsGenerated >= roomCount && !reachedRoomCount)
         {
-            GetComponent<WinPlacer>().PlaceWinObject(placer.lastExit.transform); 
+            reachedRoomCount = true;
+            GetComponent<WinPlacer>().PlaceWinObject(placer.lastExit.transform);
             mapLoadUI.SetActive(false);
             corruption.gameObject.SetActive(true);
-            if(assignedIds == false)
+            if (assignedIds == false)
             {
                 SignalIdGiver.StartAssigning();
                 assignedIds = true;
                 Debug.Log("Assigning signal ids");
             }
+            GenerateLastRoom();
         }
     }
 

@@ -17,6 +17,8 @@ public class PlayerHook : MonoBehaviour
     private float ropeLength;
     public bool isHooked;
 
+    public float hookExhaustion = 1f; // Amount of stamina consumed per hook use
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -31,6 +33,7 @@ public class PlayerHook : MonoBehaviour
         ropeLine.enabled = false;
     }
 
+    public float regenerationRate = 0.2f; // Stamina regeneration rate per second
     private void Update()
     {
         HookStamina();
@@ -42,7 +45,7 @@ public class PlayerHook : MonoBehaviour
             return;
         }
 
-        if (!isHooked && playerShoot != null && hookStamina >= 0.1f)
+        if (!isHooked && playerShoot != null && hookStamina >= hookExhaustion)
             TryHook();
     }
 
@@ -53,7 +56,7 @@ public class PlayerHook : MonoBehaviour
             hookStamina -= Time.deltaTime;
         } else
         {
-            hookStamina += Time.deltaTime;
+            hookStamina += Time.deltaTime / (1f / regenerationRate); // Adjust the division factor to control the regeneration rate
             if(hookStamina >= maxHookStamina)
             {
                 hookStamina = maxHookStamina;
@@ -100,5 +103,6 @@ public class PlayerHook : MonoBehaviour
 
         isHooked = true;
         ropeLine.enabled = true;
+        hookStamina -= hookExhaustion;
     }
 }

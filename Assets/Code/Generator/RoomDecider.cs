@@ -46,13 +46,13 @@ public class RoomDecider : MonoBehaviour
         Debug.LogError("RoomDecider needs at least one RoomDefinition.", this);
         return false;
     }
-    public RoomDefinition GetFirstRoomCandidate()
+    public RoomDefinition GetRoomCandidateByTag(string tag)
     {
-        foreach (RoomDefinition room in Rooms) 
+        foreach (RoomDefinition room in Rooms)
         {
             if(room.tags.Count() > 0)
             {
-                if (room.tags[0] == "SpawnRoom")
+                if (room.tags[0] == tag)
                 {
                     return room;
                 }

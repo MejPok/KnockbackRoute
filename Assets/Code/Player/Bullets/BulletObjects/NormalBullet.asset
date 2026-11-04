@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e6bfe1cc7af07c40840850dba421d5e, type: 3}
+  m_Name: NormalBullet
+  m_EditorClassIdentifier: Assembly-CSharp::BulletType
+  bulletName: NormalBullet
+  bulletPrefab: {fileID: 4724533763905927043, guid: 71b5f7cab89c0284cb22d15bae0f9a28, type: 3}
+  shootKey: 1
+  ParticleSystem: {fileID: 167134247696922086, guid: c5e809f46b9df8a45bd986a051f3b494, type: 3}
+  RecoilImpulse: 8
+  velocityBoostPerShot: 0.5
+  bulletSpeed: 14
+  numberOfBulletsRequested: 1
+  sizeMultiplier: 1
+  lifetime: 4
+  enableScreenShake: 0
+  shakeDuration: 0
+  shakeStrength: 0

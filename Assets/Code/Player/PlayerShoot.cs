@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,20 +8,16 @@ using UnityEngine.InputSystem;
 public class PlayerShoot : MonoBehaviour
 {
     public static PlayerShoot Instance;
-    [SerializeField] GameObject bulletPrefab;
-    [SerializeField] float bulletSpeed = 18f;
-    [SerializeField] float recoilImpulse = 12f;
+    float bigBulletSize = 2f;
+
     [SerializeField] float bulletSpawnDistance = 0.6f;
-    [SerializeField] float bulletLifetime = 4f;
     [SerializeField] public float maxVelocity = 4f;
     
     [SerializeField] bool enableVelocityBoost = true;
-    [SerializeField, Min(0f)] float velocityBoostPerShot = 1f;
     [SerializeField, Range(0f, 1f)] float nearMaxSpeedThreshold = 0.9f;
 
     public Vector2 lastVelocity;
     BulletInventory bulletInventory;
-
     Rigidbody2D rb;
     public Vector2 aimDirection;
     [SerializeField] float temporaryVelocityBoost;
@@ -41,9 +38,12 @@ public class PlayerShoot : MonoBehaviour
 
         SpeedControl();
 
-        if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
+        foreach (var bulletType in bulletInventory.bulletsEnabled)
         {
-            Shoot();
+            if (Keyboard.current != null && Keyboard.current[bulletType.shootKey].wasPressedThisFrame)
+            {
+                Shoot(bulletType);
+            }
         }
     }
 
@@ -65,42 +65,51 @@ public class PlayerShoot : MonoBehaviour
         }
     }
 
-    void Shoot()
+    void Shoot(BulletType bulletType)
     {
-        if (bulletPrefab == null || aimDirection.sqrMagnitude == 0f)
+        if ( bulletType.bulletPrefab == null || aimDirection.sqrMagnitude == 0f)
         {
             return;
         }
 
-        if (!bulletInventory.EnoughNormalBullets())
+        if (!bulletInventory.EnoughNormalBullets(bulletType.numberOfBulletsRequested))
         {
             return;
         }
 
-        bulletInventory.NormalBulletsCount -= 1;
-        GetComponent<ParticleHolder>().useParticle(transform.GetChild(1), 0);
+        bulletInventory.NormalBulletsCount -= bulletType.numberOfBulletsRequested;
 
         Vector3 spawnPosition = transform.position + (Vector3)(aimDirection * bulletSpawnDistance);
-        GameObject bullet = Instantiate(bulletPrefab, spawnPosition, transform.rotation);
+        GameObject bullet = Instantiate(bulletType.bulletPrefab, spawnPosition, transform.rotation);
+        bullet.transform.localScale *= bulletType.sizeMultiplier;
+
         Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
 
         if (bulletRb == null)
         {
-            Debug.LogError("Bullet prefab must have a Rigidbody2D.", bulletPrefab);
+            Debug.LogError("Bullet prefab must have a Rigidbody2D.");
             Destroy(bullet);
             return;
         }
-        
-        bulletRb.linearVelocity = aimDirection * bulletSpeed;
 
-        Destroy(bullet, bulletLifetime);
+        bulletRb.linearVelocity = aimDirection * bulletType.bulletSpeed;
+        Destroy(bullet, bulletType.lifetime);
+
+        var particle = Instantiate(bulletType.ParticleSystem, bullet.transform.position, bullet.transform.rotation);
+
+        if(bulletType.enableScreenShake)
+        {
+            CreateScreenShake(bulletType);
+        }
+
+
 
         if (enableVelocityBoost && rb.linearVelocity.magnitude >= maxVelocity * nearMaxSpeedThreshold)
         {
-            temporaryVelocityBoost += velocityBoostPerShot;
+            temporaryVelocityBoost += bulletType.velocityBoostPerShot;
         }
 
-        rb.AddForce(-aimDirection * recoilImpulse, ForceMode2D.Impulse);
+        rb.AddForce(-aimDirection * bulletType.RecoilImpulse, ForceMode2D.Impulse);
 
         SpeedControl();
     }
@@ -121,6 +130,14 @@ public class PlayerShoot : MonoBehaviour
 
         lastVelocity = rb.linearVelocity;
 
+    }
+
+    void CreateScreenShake(BulletType bulletType)
+    {
+        if (GetComponent<CinemachineImpulseSource>() != null)
+        {
+            GetComponent<CinemachineImpulseSource>().GenerateImpulse(bulletType.shakeStrength);
+        }
     }
 
 

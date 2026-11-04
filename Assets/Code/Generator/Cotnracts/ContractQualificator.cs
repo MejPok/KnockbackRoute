@@ -17,9 +17,9 @@ public class ContractQualificator
     public List<int> roomsPerStep = new List<int>();
     public int contractDepth;
 
-    List<RoomDefinition> createdContractRooms = new List<RoomDefinition>();
     public bool ChooseNewContract()
     {
+
         Shuffler.Shuffle(decider.possibleContracts, decider.random);
         foreach(var contract in decider.possibleContracts)
         {

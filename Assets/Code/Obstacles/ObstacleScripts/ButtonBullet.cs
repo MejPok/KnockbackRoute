@@ -13,6 +13,7 @@ public class ButtonBullet : MonoBehaviour
 
     public void OpenDoor()
     {
+        GetComponent<SpriteRenderer>().color = Color.darkOliveGreen;
         GetComponent<SignalPairing>().InvokeSignal();
         
     }

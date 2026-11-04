@@ -34,11 +34,11 @@ public class MoneyCount : MonoBehaviour
     {
         float returnedScale = 1f;
         if(time <= 3f)  returnedScale  = 2f;
-        if(time <= 2f)  returnedScale  = 3f;
-        if(time <= 1f)  returnedScale  = 5f;
-        if(time <= 0.7f)  returnedScale  = 7f;
-        if(time <= 0.5f)  returnedScale  = 10f;
-        if(time <= 0.2f)  returnedScale  = 15f;
+        if(time <= 2f)  returnedScale  = 4f;
+        if(time <= 1f)  returnedScale  = 6f;
+        if(time <= 0.7f)  returnedScale  = 8f;
+        if(time <= 0.5f)  returnedScale  = 12f;
+        if(time <= 0.2f)  returnedScale  = 20f;
 
         return returnedScale;
     }
@@ -46,7 +46,7 @@ public class MoneyCount : MonoBehaviour
     {
         int moneyGained = (int)Scoring(timerSinceLastNewRoom);
         Money += moneyGained;
-        PlayerShoot.Instance.GetComponent<BulletInventory>().NormalBulletsCount += moneyGained;
+        PlayerShoot.Instance.GetComponent<BulletInventory>().NormalBulletsCount += moneyGained / 2;
 
         Debug.Log($"enetered room number {newRoomId} in {timerSinceLastNewRoom}s and gained {moneyGained}");
 
