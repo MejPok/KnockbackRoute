@@ -190,7 +190,7 @@ public class RoomGenerator : MonoBehaviour
             {
                 successfulRollbacks++;
 
-                if (successfulRollbacks > failedRollback)
+                if (successfulRollbacks >= failedRollback)
                 {
                     addedRollbackSections = Mathf.Max(0, addedRollbackSections - 1);
                     failedRollback = 0;
