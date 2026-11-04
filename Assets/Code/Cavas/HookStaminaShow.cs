@@ -14,5 +14,8 @@ public class HookStaminaShow : MonoBehaviour
         staminaSlider.minValue = 0;
         staminaSlider.maxValue = pHook.maxHookStamina;
         staminaSlider.value = pHook.hookStamina;
+
+        float scale = pHook.hookStamina / pHook.maxHookStamina;
+
     }
 }

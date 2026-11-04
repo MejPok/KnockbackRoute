@@ -16,6 +16,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 4724533763905927043, guid: 71b5f7cab89c0284cb22d15bae0f9a28, type: 3}
   shootKey: 37
   ParticleSystem: {fileID: 167134247696922086, guid: c5e809f46b9df8a45bd986a051f3b494, type: 3}
+  CD: 3
   RecoilImpulse: 19
   velocityBoostPerShot: 7
   bulletSpeed: 20

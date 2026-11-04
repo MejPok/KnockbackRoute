@@ -216,7 +216,7 @@ public class RoomGenerator : MonoBehaviour
             
             if (failedRollback >= 10) addedRollbackSections = Mathf.Min(addedRollbackSections + 1, maxAddedRollbackSections);
 
-            if(successfulRollbacks >= rollbackSections)
+            if(successfulRollbacks > rollbackSections)
             {
                 addedRollbackSections = Mathf.Max(0, addedRollbackSections - 1);
                 failedRollback = 0;

@@ -62,4 +62,13 @@ public class MoneyCount : MonoBehaviour
             EnteredNewRoom(collision.GetComponent<RoomFootprint>().roomId);
         }
     }
+
+    public void SpendMoney(int amount)
+    {
+        if (Money - amount >= 0)
+        {
+            Money -= amount;
+            Debug.Log($"Spent {amount} money, remaining {Money}");
+        }
+    }
 }

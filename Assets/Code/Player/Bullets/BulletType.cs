@@ -11,6 +11,8 @@ public class BulletType : ScriptableObject
     public GameObject bulletPrefab;
     public Key shootKey;
     public GameObject ParticleSystem;
+    public float CD;
+
 
     [Header("Shoot Properties")]
 

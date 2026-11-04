@@ -40,7 +40,7 @@ public class PlayerShoot : MonoBehaviour
 
         foreach (var bulletType in bulletInventory.bulletsEnabled)
         {
-            if (Keyboard.current != null && Keyboard.current[bulletType.shootKey].wasPressedThisFrame)
+            if (Keyboard.current != null && Keyboard.current[bulletType.shootKey].wasPressedThisFrame && !bulletInventory.IsBulletOnCooldown(bulletType))
             {
                 Shoot(bulletType);
             }
@@ -78,6 +78,7 @@ public class PlayerShoot : MonoBehaviour
         }
 
         bulletInventory.NormalBulletsCount -= bulletType.numberOfBulletsRequested;
+        bulletInventory.RenewCooldown(bulletType);
 
         Vector3 spawnPosition = transform.position + (Vector3)(aimDirection * bulletSpawnDistance);
         GameObject bullet = Instantiate(bulletType.bulletPrefab, spawnPosition, transform.rotation);

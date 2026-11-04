@@ -4859,6 +4859,7 @@ MonoBehaviour:
   bulletsEnabled:
   - {fileID: 11400000, guid: c4dd787c69caf2246a564377a4cc0835, type: 2}
   - {fileID: 11400000, guid: b85e54953c861b74a99241a46fa04f85, type: 2}
+  bulletCooldowns: []
   NormalBulletsCount: 40
   limitedBulletsEnabled: 1
 --- !u!114 &1287144498
@@ -5359,7 +5360,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 0, b: 0, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -5374,7 +5375,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 0
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 1441194125}
   m_FillRect: {fileID: 1441194124}
   m_HandleRect: {fileID: 0}
   m_Direction: 0
