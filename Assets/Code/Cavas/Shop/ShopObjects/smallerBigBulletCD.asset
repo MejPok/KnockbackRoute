@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1acce86f14dc3c94992a35166cb1010e, type: 3}
+  m_Name: smallerBigBulletCD
+  m_EditorClassIdentifier: Assembly-CSharp::SmallerBigBulletCooldown
+  itemName: SmallerBigBulletCD
+  itemSprite: {fileID: 21300000, guid: b7cb64a77729e4343b1a3142d27fcf8b, type: 3}
+  itemDescription: Big Bullet Cooldown - 1s
+  originalPrice: 150
+  BulletType: {fileID: 11400000, guid: b85e54953c861b74a99241a46fa04f85, type: 2}
+  itemLevel: 0
+  maxItemLevel: 3
+  increasePricePerLevel: 100
+  cooldownReductionPerLevel: 1

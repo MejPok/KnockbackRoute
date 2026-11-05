@@ -94,18 +94,39 @@ public class RoomGenerator : MonoBehaviour
 
     }
 
-    public void GenerateLastRoom()
+    public bool GenerateLastRoom()
     {
-        RoomDefinition lastRoomCandidate = decider.GetRoomCandidateByTag("LastRoom");
+        RoomDefinition[] lastRoomCandidate = new RoomDefinition[] { decider.GetRoomCandidateByTag("LastRoom") };
 
-        bool placed = false;
-        if (placer.lastExit != null)
+        roomCount = roomsGenerated + 1;
+
+        if (placer == null || placer.RoomsPlaced == 0) return false;
+        if (roomsGenerated >= roomCount) return true;
+
+        int roomsForStep = 1;
+
+        int startingRoomCount = placer.RoomsPlaced;
+        int startingContractNumber = contractNumber;
+        int startingContractPhase = contractPhase;
+
+        int targetRoomCount = Mathf.Min(roomCount, startingRoomCount + roomsForStep);
+
+        bool generated = placer.GenerateRoomsUpToCount(
+            lastRoomCandidate, generatedRoomsRoot, targetRoomCount,
+            maxGenerationAttempts, startingRoomCount);
+
+        roomsGenerated = placer.RoomsPlaced;
+        if (!generated)
         {
-            placed = placer.PlaceFirstRoom(lastRoomCandidate, placer.lastExit.transform);
-
+            RollbackFailedSection();
+            return false;
         }
 
-        if (!placed) Debug.LogError("No eligible starting room could be placed.", this);
+        generatedSections.Add(new GeneratedSection(
+            roomsGenerated - startingRoomCount, startingContractNumber, startingContractPhase));
+
+        return true;
+ 
 
     }
 

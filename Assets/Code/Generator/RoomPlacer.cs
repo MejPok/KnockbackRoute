@@ -266,6 +266,7 @@ public class RoomPlacer : MonoBehaviour
         return TryPlaceStartCandidate();
     }
 
+
     private bool TryPlaceStartCandidate()
     {
         while (startFrame != null && startFrame.nextCandidate < startFrame.candidates.Count)

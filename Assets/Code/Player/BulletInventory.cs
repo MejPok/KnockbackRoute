@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BulletInventory : MonoBehaviour
 {
-    public BulletType[] allBulletsType;
+    public List<BulletType> allBulletsType = new List<BulletType>();
     public List<BulletType> bulletsEnabled = new List<BulletType>();
     public List<float> bulletCooldowns = new List<float>();
 
@@ -73,7 +73,7 @@ public class BulletInventory : MonoBehaviour
 
                 bool bulletFound = false;
 
-                for (int i = 0; i < allBulletsType.Length; i++)
+                for (int i = 0; i < allBulletsType.Count; i++)
                 {
                     if (allBulletsType[i].name == bulletType)
                     {
