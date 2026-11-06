@@ -1,5 +1,6 @@
 using Assets.Code.Cavas;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ShopWorldItem : MonoBehaviour
 {
@@ -11,6 +12,21 @@ public class ShopWorldItem : MonoBehaviour
     private void Update()
     {
         GetComponent<SpriteRenderer>().sprite = representedItem.itemSprite;
+
+        if(playerInRange && Keyboard.current.bKey.wasPressedThisFrame)
+        {
+            if (shopManager != null)
+            {
+
+                MoneyCount moneyCount = PlayerShoot.Instance.gameObject.GetComponent<MoneyCount>();
+                if(moneyCount.BuyItem(representedItem))
+                {
+                    representedItem.BoughtItem();
+                    CanvasShopControl.Instance.UpdateShopCanvas(representedItem, false);
+                    Destroy(gameObject);
+                }
+            }
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)

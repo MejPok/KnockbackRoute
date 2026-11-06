@@ -63,7 +63,7 @@ public class MoneyCount : MonoBehaviour
         }
     }
 
-    public void SpendMoney(int amount)
+    void SpendMoney(int amount)
     {
         if (Money - amount >= 0)
         {
@@ -71,4 +71,21 @@ public class MoneyCount : MonoBehaviour
             Debug.Log($"Spent {amount} money, remaining {Money}");
         }
     }
+
+    public bool BuyItem(ShopItem item)
+    {
+        if (Money - item.itemPrice >= 0)
+        {
+            SpendMoney(item.itemPrice);
+            Debug.Log($"Bought {item.itemName} for {item.itemPrice} money, remaining {Money}");
+            return true;
+        }
+        else
+        {
+            Debug.Log($"Not enough money to buy {item.itemName}, need {item.itemPrice}, have {Money}");
+            return false;
+        }
+    }
+
+
 }
