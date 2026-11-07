@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b66525cc8721d92479d824feb293bc36, type: 3}
+  m_Name: Enable Big Bullet
+  m_EditorClassIdentifier: Assembly-CSharp::EnableBigBullet
+  itemName: Enable Big Bullet
+  itemSprite: {fileID: 0}
+  itemDescription: Allows you to use Big Bullets, that are stronger, but use up 10
+    bullets
+  originalPrice: 300
+  BulletType: {fileID: 0}
+  DontShowThisProductAnymore: 0
+  itemLevel: 0
+  maxItemLevel: 1
+  increasePricePerLevel: 10

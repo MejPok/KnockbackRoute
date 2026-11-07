@@ -19,6 +19,12 @@ public class ShopWorldItem : MonoBehaviour
             {
 
                 MoneyCount moneyCount = PlayerShoot.Instance.gameObject.GetComponent<MoneyCount>();
+
+                if(representedItem.itemLevel >= representedItem.maxItemLevel)
+                {
+                    return;
+                }
+
                 if(moneyCount.BuyItem(representedItem))
                 {
                     representedItem.BoughtItem();
@@ -38,6 +44,7 @@ public class ShopWorldItem : MonoBehaviour
             {
                 CanvasShopControl.Instance.UpdateShopCanvas(representedItem, true);
                 Debug.Log($"Player in range of {representedItem.itemName}");
+
                 playerInRange = true;
 
             }

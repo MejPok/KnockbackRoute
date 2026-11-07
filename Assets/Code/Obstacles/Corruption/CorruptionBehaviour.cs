@@ -62,7 +62,7 @@ public class CorruptionBehaviour : MonoBehaviour
     {
         System.Random random = new System.Random();
         
-        for(int i = 0; i < tilemaps.Count && i <= index; i++)
+        for(int i = 0; i < tilemaps.Count -2 && i <= index; i++)
         {
             tilemaps[i].color = new Color((float)((float)random.Next(256) / (float)255), (float)((float)random.Next(256) /(float)255), (float)((float)random.Next(256) / (float)255), 1);
 

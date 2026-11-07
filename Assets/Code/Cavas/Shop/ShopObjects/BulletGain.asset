@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1da41f7a51aa2b84d8061239491215c7, type: 3}
+  m_Name: BulletGain
+  m_EditorClassIdentifier: Assembly-CSharp::BulletGain
+  itemName: BulletGain
+  itemSprite: {fileID: 0}
+  itemDescription: Increase your bullet gain per room by 10%.
+  originalPrice: 150
+  BulletType: {fileID: 0}
+  itemLevel: 0
+  maxItemLevel: 10
+  increasePricePerLevel: 150
+  BulletGainIncreasePercentage: 1
+  IncreasePercentagePerlevel: 0.1

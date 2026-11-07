@@ -9,6 +9,7 @@ public class ShopItem : ScriptableObject
 
     public BulletType BulletType;
 
+    public bool DontShowThisProductAnymore;
     public int itemPrice
     {
         get => originalPrice + (itemLevel * increasePricePerLevel);
@@ -22,6 +23,11 @@ public class ShopItem : ScriptableObject
     public virtual void BoughtItem()
     {
         Debug.Log($"Used {itemName}");
+
+        if(itemLevel >= maxItemLevel)
+        {
+            DontShowThisProductAnymore = true;
+        }
     }
 
 }

@@ -1,3 +1,4 @@
+using Assets.Code.Cavas.Shop;
 using UnityEngine;
 
 public class MoneyCount : MonoBehaviour
@@ -37,16 +38,40 @@ public class MoneyCount : MonoBehaviour
         if(time <= 2f)  returnedScale  = 4f;
         if(time <= 1f)  returnedScale  = 6f;
         if(time <= 0.7f)  returnedScale  = 8f;
-        if(time <= 0.5f)  returnedScale  = 12f;
-        if(time <= 0.2f)  returnedScale  = 20f;
+        if(time <= 0.5f)  returnedScale  = 10f;
+        if(time <= 0.2f)  returnedScale  = 12f;
 
         return returnedScale;
     }
     public void EnteredNewRoom(int newRoomId)
     {
         int moneyGained = (int)Scoring(timerSinceLastNewRoom);
-        Money += moneyGained;
-        PlayerShoot.Instance.GetComponent<BulletInventory>().NormalBulletsCount += moneyGained / 2;
+
+
+        MoneyGain moneyUpgrade = (MoneyGain)UpgradesManager.Instance.FindRightItem("MoneyGain");
+        if (moneyUpgrade != null)
+        {
+            Money += (int)((moneyGained / 2) * moneyUpgrade.MoneyGainIncreasePercentage);
+
+        } else
+        {
+            Money += (moneyGained / 2);
+        }
+
+        
+
+
+
+        BulletGain bulletUpgrade = (BulletGain)UpgradesManager.Instance.FindRightItem("BulletGain");
+        if(bulletUpgrade != null)
+        {
+            PlayerShoot.Instance.GetComponent<BulletInventory>().NormalBulletsCount += (int)((moneyGained / 2) * bulletUpgrade.BulletGainIncreasePercentage);
+            
+        } else
+        {
+            PlayerShoot.Instance.GetComponent<BulletInventory>().NormalBulletsCount += (int)(moneyGained / 2);
+        }
+       
 
         Debug.Log($"enetered room number {newRoomId} in {timerSinceLastNewRoom}s and gained {moneyGained}");
 

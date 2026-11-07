@@ -11,6 +11,8 @@ public class ParticleHolder : MonoBehaviour
         var main = particleSystem.main;
         main.stopAction = ParticleSystemStopAction.Destroy;
         particleSystem.Play();
+
+        
         
     }
 }

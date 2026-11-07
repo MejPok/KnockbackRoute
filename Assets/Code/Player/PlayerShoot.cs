@@ -12,7 +12,7 @@ public class PlayerShoot : MonoBehaviour
 
     [SerializeField] float bulletSpawnDistance = 0.6f;
     [SerializeField] public float maxVelocity = 4f;
-    
+
     [SerializeField] bool enableVelocityBoost = true;
     [SerializeField, Range(0f, 1f)] float nearMaxSpeedThreshold = 0.9f;
 
@@ -32,19 +32,53 @@ public class PlayerShoot : MonoBehaviour
         bulletInventory = GetComponent<BulletInventory>();
         rb = GetComponent<Rigidbody2D>();
     }
+
+    public float bigBuleltHoldTime = 3f;
+    float bigBulletHoldTimer;
+    
     void Update()
     {
+        
         RotatePlayer();
 
         SpeedControl();
 
         foreach (var bulletType in bulletInventory.bulletsEnabled)
         {
+        
+            if (bulletType.bulletName == "Big Bullet")
+            {
+                if (Keyboard.current[bulletType.shootKey].isPressed)
+                {
+                    bigBulletHoldTimer += Time.deltaTime;
+
+                    if (bigBulletHoldTimer >= bigBuleltHoldTime && !bulletInventory.IsBulletOnCooldown(bulletType))
+                    {
+                        bigBulletHoldTimer = 0;
+                        Shoot(bulletType);
+
+                    }
+
+                    break;
+                }
+                else
+                {
+                    bigBulletHoldTimer = 0;
+                }
+
+                
+                
+
+                continue;
+            }
+
             if (Keyboard.current != null && Keyboard.current[bulletType.shootKey].wasPressedThisFrame && !bulletInventory.IsBulletOnCooldown(bulletType))
             {
                 Shoot(bulletType);
             }
         }
+
+
     }
 
     void RotatePlayer()
@@ -67,7 +101,7 @@ public class PlayerShoot : MonoBehaviour
 
     void Shoot(BulletType bulletType)
     {
-        if ( bulletType.bulletPrefab == null || aimDirection.sqrMagnitude == 0f)
+        if (bulletType.bulletPrefab == null || aimDirection.sqrMagnitude == 0f)
         {
             return;
         }
@@ -98,7 +132,7 @@ public class PlayerShoot : MonoBehaviour
 
         var particle = Instantiate(bulletType.ParticleSystem, bullet.transform.position, bullet.transform.rotation);
 
-        if(bulletType.enableScreenShake)
+        if (bulletType.enableScreenShake)
         {
             CreateScreenShake(bulletType);
         }
@@ -142,5 +176,5 @@ public class PlayerShoot : MonoBehaviour
     }
 
 
-    
+
 }

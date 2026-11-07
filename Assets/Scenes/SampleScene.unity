@@ -4967,6 +4967,7 @@ MonoBehaviour:
   lastVelocity: {x: 0, y: 0}
   aimDirection: {x: 0, y: 0}
   temporaryVelocityBoost: 0
+  bigBuleltHoldTime: 1
 --- !u!50 &1287144496
 Rigidbody2D:
   serializedVersion: 5
@@ -5011,7 +5012,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b85e54953c861b74a99241a46fa04f85, type: 2}
   bulletsEnabled:
   - {fileID: 11400000, guid: c4dd787c69caf2246a564377a4cc0835, type: 2}
-  - {fileID: 11400000, guid: b85e54953c861b74a99241a46fa04f85, type: 2}
   bulletCooldowns: []
   NormalBulletsCount: 40
   limitedBulletsEnabled: 1
@@ -5248,42 +5248,21 @@ MonoBehaviour:
     DissipationDistance: 100
     PropagationSpeed: 343
   DefaultVelocity: {x: 0, y: -1, z: 0}
---- !u!58 &1287144504
-CircleCollider2D:
+--- !u!114 &1287144504
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1287144493}
   m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.3
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efc2fcd33a3a65d4e8f8875fa9ebc671, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradesPlayerAction
+  playerHook: {fileID: 1287144499}
+  playerShoot: {fileID: 1287144495}
+  bulletInventory: {fileID: 1287144497}
 --- !u!1 &1329417437
 GameObject:
   m_ObjectHideFlags: 0
@@ -6990,6 +6969,56 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &1947153685
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1947153687}
+  - component: {fileID: 1947153686}
+  m_Layer: 0
+  m_Name: UpgradeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1947153686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947153685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ea49a8f9921876499b40547bcffd6f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Code.Cavas.Shop.UpgradesManager
+  everyShopItem:
+  - {fileID: 11400000, guid: a0174b1b9b0789841b9ed38d24ce413f, type: 2}
+  - {fileID: 11400000, guid: 262f5fe91a4fbcb45bc26714db53919d, type: 2}
+  - {fileID: 11400000, guid: df4766ac62cd18f4285abc589980f96a, type: 2}
+  - {fileID: 11400000, guid: 837e455cc9ed7b14f85935112b7bc9f7, type: 2}
+  - {fileID: 11400000, guid: 91c7a53e2975d634c8445fb2b039c314, type: 2}
+--- !u!4 &1947153687
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947153685}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -34.40111, y: -119.9857, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1974131456
 GameObject:
   m_ObjectHideFlags: 0
@@ -7313,3 +7342,4 @@ SceneRoots:
   - {fileID: 140988283}
   - {fileID: 396228685}
   - {fileID: 489342804}
+  - {fileID: 1947153687}

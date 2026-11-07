@@ -25,7 +25,7 @@ namespace Assets.Code.Cavas
 
             if (item != null)
             {
-                shopCanvas.text = $"Item: {item.itemName} Price: {item.itemPrice}, \n {item.itemDescription} \n Press B to Buy";
+                shopCanvas.text = $"Item: {item.itemName} Price: {item.itemPrice}, Level: {item.itemLevel}/{item.maxItemLevel},  \n {item.itemDescription} \n Press B to Buy";
                 if(item.itemLevel >= item.maxItemLevel)
                 {
                     shopCanvas.text += "\nMax Level Reached";

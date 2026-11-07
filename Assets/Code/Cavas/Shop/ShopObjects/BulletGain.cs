@@ -1,12 +1,16 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Shop/Smaller Big Bullet Cooldown")]
+[CreateAssetMenu(menuName = "Shop/Bullet Gain")]
 public class BulletGain : ShopItem
 {
-    public float BulletGainIncrease = 1;
+
+    public float BulletGainIncreasePercentage = 1;
+    public float IncreasePercentagePerlevel = 0.1f;
+
     public override void BoughtItem()
     {
-        base.BoughtItem();
         itemLevel++;
+        BulletGainIncreasePercentage = 1 +  itemLevel*IncreasePercentagePerlevel;
+        base.BoughtItem();
     }
 }

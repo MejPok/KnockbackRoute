@@ -29,6 +29,11 @@ public class ShopManager : MonoBehaviour
                 break;
             }
 
+            if(ShopItems[randomIndex].DontShowThisProductAnymore == true)
+            {
+                continue;
+            }
+
             GameObject shopItem = Instantiate(shopImageShow, pos.position, Quaternion.identity);
             shopItem.GetComponent<ShopWorldItem>().representedItem = (ShopItem)shopItems[randomIndex];
             shopItem.GetComponent<ShopWorldItem>().shopManager = this;

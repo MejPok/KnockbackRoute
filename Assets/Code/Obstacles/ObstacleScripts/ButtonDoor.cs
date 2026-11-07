@@ -1,4 +1,5 @@
 using System.Collections;
+using Assets.Code.Cavas.Shop;
 using UnityEngine;
 
 public class ButtonDoor : MonoBehaviour
@@ -36,10 +37,12 @@ public class ButtonDoor : MonoBehaviour
     void Update()
     {
         var target = (open) ? OpenPosition.position : ClosedPosition.position;
+        var upgrade = (DoorOpenSpeed)UpgradesManager.Instance.FindRightItem("DoorOpenSpeed");
+
         Body.position = Vector3.MoveTowards(
                 Body.position,
                 target,
-                Mathf.Max(0f, moveSpeed) * Time.deltaTime);
+                Mathf.Max(0f, moveSpeed * upgrade.BaseSpeed) * Time.deltaTime);
     }
 
 }

@@ -31,4 +31,18 @@ public class UpgradesPlayerAction : MonoBehaviour
         }
         
     }
+
+    public void EnableBigBullet()
+    {
+        foreach (BulletType bulletType in bulletInventory.allBulletsType)
+        {
+            if (bulletType.name == "Big Bullet")
+            {
+                if (!bulletInventory.bulletsEnabled.Contains(bulletType))
+                {
+                    bulletInventory.bulletsEnabled.Add(bulletType);
+                }
+            }
+        }
+    }
 }
