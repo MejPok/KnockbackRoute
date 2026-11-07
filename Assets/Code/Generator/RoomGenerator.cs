@@ -52,8 +52,13 @@ public class RoomGenerator : MonoBehaviour
     }
     private void Start()
     {
+        roomCount = PlayerPrefs.GetInt("RoomCount");
+
+
         decider = GetComponent<RoomDecider>();
         placer = GetComponent<RoomPlacer>();
+
+        decider.Difficulty = PlayerPrefs.GetInt("Difficulty");
         if (generateOnStart) StartGeneration();
     }
 

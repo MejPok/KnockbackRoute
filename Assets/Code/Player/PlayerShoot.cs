@@ -29,6 +29,7 @@ public class PlayerShoot : MonoBehaviour
 
     void Start()
     {
+        DontDestroyOnLoad(gameObject);
         bulletInventory = GetComponent<BulletInventory>();
         rb = GetComponent<Rigidbody2D>();
     }

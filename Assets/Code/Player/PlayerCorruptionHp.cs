@@ -19,6 +19,8 @@ public class PlayerCorruptionHp : MonoBehaviour
     float timeInCorruption;
     void Update()
     {
+
+
         if(Hp != maxHp && !InsideCorruption)
         {
             healTimer += Time.deltaTime;
@@ -46,7 +48,14 @@ public class PlayerCorruptionHp : MonoBehaviour
             timeInCorruption = 0;
         }
 
-        canvasLowHpEffect.color = new Color(1,0,0,1 - HpPercentage());
+        if(canvasLowHpEffect != null)
+        {
+            canvasLowHpEffect.color = new Color(1,0,0,1 - HpPercentage());
+
+        } else
+        {
+            Debug.Log("canvas low hp effect is null");
+        }
     }
 
     public void DealDamage(int damage)

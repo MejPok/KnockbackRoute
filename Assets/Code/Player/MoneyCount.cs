@@ -17,17 +17,33 @@ public class MoneyCount : MonoBehaviour
     {
         timerSinceLastNewRoom += Time.deltaTime;
 
-        Transform root = generator.GetChild(0);
+        if(RoomGenerator.Instance != null)
+        {
+            generator = RoomGenerator.Instance.gameObject.transform;
+        }
+
+        Transform? root = null;
+
+        if(generator != null)
+        {
+            root = generator.GetChild(0);
+
+        }
+
 
         if(root == null)
         {
             return;
         }
 
-        for(int i = 0; i < root.childCount; i++)
+        if(root != null)
         {
-            root.GetChild(i).GetComponent<RoomFootprint>().roomId = i;
+            for (int i = 0; i < root.childCount; i++)
+            {
+                root.GetChild(i).GetComponent<RoomFootprint>().roomId = i;
+            }
         }
+        
 
     }
 

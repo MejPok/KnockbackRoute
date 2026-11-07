@@ -13,9 +13,12 @@ public class CameraSizeControl : MonoBehaviour
 
     CinemachineCamera cinemachineCamera;
 
-    void Awake()
+    void Start()
     {
         cinemachineCamera = GetComponent<CinemachineCamera>();
+        var target = new CameraTarget();
+        target.TrackingTarget = PlayerShoot.Instance.gameObject.transform;
+        cinemachineCamera.Target = target;
     }
 
     void Update()
