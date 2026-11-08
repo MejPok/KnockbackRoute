@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class ShopManager : MonoBehaviour
 {

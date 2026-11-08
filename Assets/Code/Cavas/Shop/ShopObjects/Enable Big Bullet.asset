@@ -18,7 +18,7 @@ MonoBehaviour:
     bullets
   originalPrice: 300
   BulletType: {fileID: 0}
-  DontShowThisProductAnymore: 1
+  DontShowThisProductAnymore: 0
   itemLevel: 0
   maxItemLevel: 1
   increasePricePerLevel: 10
