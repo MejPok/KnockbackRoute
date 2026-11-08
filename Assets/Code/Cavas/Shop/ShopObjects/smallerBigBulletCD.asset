@@ -18,7 +18,7 @@ MonoBehaviour:
   originalPrice: 150
   BulletType: {fileID: 11400000, guid: b85e54953c861b74a99241a46fa04f85, type: 2}
   DontShowThisProductAnymore: 0
-  itemLevel: 1
+  itemLevel: 0
   maxItemLevel: 3
   increasePricePerLevel: 100
   cooldownReductionPerLevel: 1

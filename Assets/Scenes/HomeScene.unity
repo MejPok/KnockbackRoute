@@ -6938,6 +6938,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6290287111167712367, guid: 2685bf90ffb154741b8b166125b88ac2, type: 3}
+      propertyPath: bulletsEnabled.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
