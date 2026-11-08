@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: MoneyGain
   m_EditorClassIdentifier: Assembly-CSharp::MoneyGain
   itemName: MoneyGain
-  itemSprite: {fileID: 0}
+  itemSprite: {fileID: -6989871009390789807, guid: 7daa1bb1c04af654aa07900c5c415d92, type: 3}
   itemDescription: Increase money gain per room by 10%.
   originalPrice: 150
   BulletType: {fileID: 0}
-  itemLevel: 0
+  DontShowThisProductAnymore: 0
+  itemLevel: 2
   maxItemLevel: 10
   increasePricePerLevel: 200
-  MoneyGainIncreasePercentage: 1
+  MoneyGainIncreasePercentage: 1.2
   IncreasePercentagePerlevel: 0.1

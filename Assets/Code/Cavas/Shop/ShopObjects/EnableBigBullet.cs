@@ -6,7 +6,7 @@ public class EnableBigBullet  : ShopItem
     public override void BoughtItem()
     {
         itemLevel++;
-        UpgradesPlayerAction.Instance.EnableBigBullet();
+        PlayerShoot.Instance.GetComponent<UpgradesPlayerAction>().EnableBigBullet();
 
         base.BoughtItem();
         

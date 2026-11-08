@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: DoorOpenSpeed
   m_EditorClassIdentifier: Assembly-CSharp::DoorOpenSpeed
   itemName: Door Open Speed
-  itemSprite: {fileID: 0}
+  itemSprite: {fileID: -2709967799420756217, guid: 7daa1bb1c04af654aa07900c5c415d92, type: 3}
   itemDescription: Increases door opening speed by 50%
   originalPrice: 100
   BulletType: {fileID: 0}
   DontShowThisProductAnymore: 0
-  itemLevel: 0
+  itemLevel: 2
   maxItemLevel: 5
   increasePricePerLevel: 100
-  BaseSpeed: 1
+  BaseSpeed: 2
   IncreasePercentagePerlevel: 0.5

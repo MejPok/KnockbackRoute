@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerCorruptionHp : MonoBehaviour
@@ -19,7 +21,10 @@ public class PlayerCorruptionHp : MonoBehaviour
     float timeInCorruption;
     void Update()
     {
-
+        if(SceneManager.GetActiveScene().name == "HomeScene")
+        {
+            return;
+        }
 
         if(Hp != maxHp && !InsideCorruption)
         {
@@ -48,12 +53,22 @@ public class PlayerCorruptionHp : MonoBehaviour
             timeInCorruption = 0;
         }
 
+        
         if(canvasLowHpEffect != null)
         {
             canvasLowHpEffect.color = new Color(1,0,0,1 - HpPercentage());
 
         } else
         {
+            var objekty = FindObjectsByType(typeof(Image), FindObjectsSortMode.None);
+            foreach (var obj in objekty)
+            {
+                if (obj.name == "LowHpEffectImage")
+                {
+                    canvasLowHpEffect = obj.GetComponent<Image>();
+                }
+            }
+
             Debug.Log("canvas low hp effect is null");
         }
     }

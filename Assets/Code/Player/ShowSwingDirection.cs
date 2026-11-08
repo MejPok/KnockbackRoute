@@ -17,7 +17,7 @@ public class ShowSwingDirection : MonoBehaviour
     }
     private void LateUpdate() {
 
-        if (!PlayerShoot.Instance.gameObject.GetComponent<PlayerHook>().isHooked)
+        if (!transform.parent.gameObject.GetComponent<PlayerHook>().isHooked)
         {
             return;
         }

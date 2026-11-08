@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: BulletGain
   m_EditorClassIdentifier: Assembly-CSharp::BulletGain
   itemName: BulletGain
-  itemSprite: {fileID: 0}
+  itemSprite: {fileID: 8919790979402673707, guid: 7daa1bb1c04af654aa07900c5c415d92, type: 3}
   itemDescription: Increase your bullet gain per room by 10%.
   originalPrice: 150
   BulletType: {fileID: 0}
-  itemLevel: 0
+  DontShowThisProductAnymore: 0
+  itemLevel: 1
   maxItemLevel: 10
   increasePricePerLevel: 150
-  BulletGainIncreasePercentage: 1
+  BulletGainIncreasePercentage: 1.1
   IncreasePercentagePerlevel: 0.1

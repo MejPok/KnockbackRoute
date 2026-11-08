@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Enable Big Bullet
   m_EditorClassIdentifier: Assembly-CSharp::EnableBigBullet
   itemName: Enable Big Bullet
-  itemSprite: {fileID: 0}
+  itemSprite: {fileID: 8047437019180738919, guid: 7daa1bb1c04af654aa07900c5c415d92, type: 3}
   itemDescription: Allows you to use Big Bullets, that are stronger, but use up 10
     bullets
   originalPrice: 300
   BulletType: {fileID: 0}
-  DontShowThisProductAnymore: 0
-  itemLevel: 0
+  DontShowThisProductAnymore: 1
+  itemLevel: 1
   maxItemLevel: 1
   increasePricePerLevel: 10

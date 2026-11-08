@@ -257,7 +257,6 @@ public class RoomGenerator : MonoBehaviour
         {
             reachedRoomCount = true;
             GetComponent<WinPlacer>().PlaceWinObject(placer.lastExit.transform);
-            mapLoadUI.SetActive(false);
             corruption.gameObject.SetActive(true);
             if (assignedIds == false)
             {
@@ -266,6 +265,7 @@ public class RoomGenerator : MonoBehaviour
                 Debug.Log("Assigning signal ids");
             }
             GenerateLastRoom();
+            mapLoadUI.SetActive(false);
         }
     }
 

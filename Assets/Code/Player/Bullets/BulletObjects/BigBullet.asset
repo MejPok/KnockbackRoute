@@ -21,7 +21,7 @@ MonoBehaviour:
   velocityBoostPerShot: 7
   bulletSpeed: 20
   numberOfBulletsRequested: 10
-  sizeMultiplier: 2
+  sizeMultiplier: 1.7
   lifetime: 10
   enableScreenShake: 1
   shakeDuration: 0.1

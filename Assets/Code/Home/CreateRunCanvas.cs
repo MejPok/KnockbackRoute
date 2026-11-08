@@ -14,12 +14,6 @@ namespace Assets.Code.Home
 
         public TextMeshProUGUI[] runTexts;
 
-        bool ShowRunScreen = false;
-
-        void Start()
-        {
-        }
-
         public void RunScreen(bool show)
         {
             CreateRunScreen.SetActive(show);

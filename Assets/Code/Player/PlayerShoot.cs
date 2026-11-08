@@ -25,13 +25,28 @@ public class PlayerShoot : MonoBehaviour
 
     void Awake()
     {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
+
+        SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
+    }
+
+    private void SceneManager_activeSceneChanged(Scene arg0, Scene arg1)
+    {
+        transform.position = new Vector2(0, 1);
+        GetComponent<PlayerCorruptionHp>().InsideCorruption = false;
+        GetComponent<PlayerCorruptionHp>().Hp = GetComponent<PlayerCorruptionHp>().maxHp;
+        bulletInventory = GetComponent<BulletInventory>();
+        bulletInventory.NormalBulletsCount = 50;
     }
 
     void Start()
     {
         DontDestroyOnLoad(gameObject);
-        bulletInventory = GetComponent<BulletInventory>();
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -70,10 +85,12 @@ public class PlayerShoot : MonoBehaviour
                 if (Keyboard.current[bulletType.shootKey].isPressed)
                 {
                     bigBulletHoldTimer += Time.deltaTime;
-
+                    GetComponentInChildren<ChargeRing>().SetCharge(bigBulletHoldTimer / bigBuleltHoldTime);
                     if (bigBulletHoldTimer >= bigBuleltHoldTime && !bulletInventory.IsBulletOnCooldown(bulletType))
                     {
                         bigBulletHoldTimer = 0;
+                        GetComponentInChildren<ChargeRing>().SetCharge(bigBulletHoldTimer / bigBuleltHoldTime);
+
                         Shoot(bulletType);
 
                     }
@@ -83,10 +100,12 @@ public class PlayerShoot : MonoBehaviour
                 else
                 {
                     bigBulletHoldTimer = 0;
+                    GetComponentInChildren<ChargeRing>().SetCharge(bigBulletHoldTimer / bigBuleltHoldTime);
+
                 }
 
-                
-                
+
+
 
                 continue;
             }

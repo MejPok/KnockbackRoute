@@ -7,7 +7,7 @@ public class SmallerBigBulletCooldown  : ShopItem
     public override void BoughtItem()
     {
         itemLevel++;
-        UpgradesPlayerAction.Instance.SmallerBigBulletCooldown(this);
+        PlayerShoot.Instance.GetComponent<UpgradesPlayerAction>().SmallerBigBulletCooldown(this);
         base.BoughtItem();
         
     }

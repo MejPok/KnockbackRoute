@@ -2,14 +2,12 @@ using UnityEngine;
 
 public class UpgradesPlayerAction : MonoBehaviour
 {
-    public static UpgradesPlayerAction Instance;
     public PlayerHook playerHook;
     public PlayerShoot playerShoot;
     public BulletInventory bulletInventory;
 
     private void Start()
     {
-        Instance = this;
         playerHook = GetComponent<PlayerHook>();
         playerShoot = GetComponent<PlayerShoot>();
         bulletInventory = GetComponent<BulletInventory>();
@@ -36,13 +34,17 @@ public class UpgradesPlayerAction : MonoBehaviour
     {
         foreach (BulletType bulletType in bulletInventory.allBulletsType)
         {
-            if (bulletType.name == "Big Bullet")
+            if (bulletType.bulletName == "Big Bullet")
             {
                 if (!bulletInventory.bulletsEnabled.Contains(bulletType))
                 {
                     bulletInventory.bulletsEnabled.Add(bulletType);
+                    Debug.Log("Added big bullet to inventory");
+                    return;
                 }
             }
         }
+        Debug.Log("Couldnt find big bullet item");
+
     }
 }
