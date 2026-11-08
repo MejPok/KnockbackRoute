@@ -1,6 +1,7 @@
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BulletInventory))]
@@ -36,13 +37,30 @@ public class PlayerShoot : MonoBehaviour
 
     public float bigBuleltHoldTime = 3f;
     float bigBulletHoldTimer;
+
+    public bool ManualMovement;
+    public float ManualMovementSpeed;
     
     void Update()
     {
-        
         RotatePlayer();
 
         SpeedControl();
+
+        if(SceneManager.GetActiveScene().name == "HomeScene")
+        {
+            ManualMovement = true;
+        }
+        else
+        {
+            ManualMovement = false;
+        }
+
+        if (ManualMovement)
+        {
+            ManualMovementInput();
+            return;
+        }
 
         foreach (var bulletType in bulletInventory.bulletsEnabled)
         {
@@ -81,6 +99,35 @@ public class PlayerShoot : MonoBehaviour
 
 
     }
+
+    Vector2 moveVector;
+    void ManualMovementInput()
+    {
+        int up = 0;
+        int side = 0;
+
+        if (Keyboard.current.wKey.isPressed)
+        {
+            up++;
+        }
+        if (Keyboard.current.dKey.isPressed)
+        {
+            side++;
+        }
+        if (Keyboard.current.sKey.isPressed)
+        {
+            up--;
+        }
+        if (Keyboard.current.aKey.isPressed)
+        {
+            side--;
+        }
+
+        moveVector = new Vector2(side, up).normalized;
+
+    }
+
+
 
     void RotatePlayer()
     {
@@ -173,6 +220,14 @@ public class PlayerShoot : MonoBehaviour
         if (GetComponent<CinemachineImpulseSource>() != null)
         {
             GetComponent<CinemachineImpulseSource>().GenerateImpulse(bulletType.shakeStrength);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (ManualMovement)
+        {
+            rb.linearVelocity = moveVector * ManualMovementSpeed;
         }
     }
 

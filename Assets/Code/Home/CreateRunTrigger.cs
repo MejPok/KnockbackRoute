@@ -7,11 +7,13 @@ namespace Assets.Code.Home
 {
     class CreateRunTrigger : MonoBehaviour
     {
+        public CreateRunCanvas runCanvas;
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.gameObject.CompareTag("Player"))
             {
-                CreateRunCanvas.Instance.RunScreen(true);
+                if (runCanvas != null)
+                    runCanvas.RunScreen(true);
             }
         }
 
@@ -19,7 +21,8 @@ namespace Assets.Code.Home
         {
             if (collision.gameObject.CompareTag("Player"))
             {
-                CreateRunCanvas.Instance.RunScreen(false);
+                if (runCanvas != null)
+                    runCanvas.RunScreen(false);
             }
         }
 

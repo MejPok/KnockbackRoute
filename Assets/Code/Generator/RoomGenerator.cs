@@ -1,3 +1,4 @@
+using Assets.Code.Round;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -52,13 +53,15 @@ public class RoomGenerator : MonoBehaviour
     }
     private void Start()
     {
-        roomCount = PlayerPrefs.GetInt("RoomCount");
+        var run = RunManager.Instance;
+        roomCount = run.runOptions[run.ChosenOption].RoomCount;
 
 
         decider = GetComponent<RoomDecider>();
         placer = GetComponent<RoomPlacer>();
 
-        decider.Difficulty = PlayerPrefs.GetInt("Difficulty");
+        decider.Difficulty = run.runOptions[run.ChosenOption].Difficulty;
+
         if (generateOnStart) StartGeneration();
     }
 

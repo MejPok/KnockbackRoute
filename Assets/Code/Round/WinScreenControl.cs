@@ -22,7 +22,7 @@ public class WinScreenControl : MonoBehaviour
 
     public void ReloadScene()
     {
-        Debug.Log("Reloading scene");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Debug.Log("Home");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 }

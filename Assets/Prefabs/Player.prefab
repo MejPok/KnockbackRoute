@@ -454,6 +454,8 @@ MonoBehaviour:
   aimDirection: {x: 0, y: 0}
   temporaryVelocityBoost: 0
   bigBuleltHoldTime: 1
+  ManualMovement: 1
+  ManualMovementSpeed: 8
 --- !u!114 &6290287111167712367
 MonoBehaviour:
   m_ObjectHideFlags: 0
