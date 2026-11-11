@@ -93,6 +93,7 @@ public class PlayerShoot : MonoBehaviour
 
                         Shoot(bulletType);
 
+
                     }
 
                     break;
@@ -113,6 +114,7 @@ public class PlayerShoot : MonoBehaviour
             if (Keyboard.current != null && Keyboard.current[bulletType.shootKey].wasPressedThisFrame && !bulletInventory.IsBulletOnCooldown(bulletType))
             {
                 Shoot(bulletType);
+                GetComponent<Animator>().SetTrigger("Shoot");
             }
         }
 

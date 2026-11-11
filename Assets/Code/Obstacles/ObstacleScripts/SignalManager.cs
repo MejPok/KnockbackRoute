@@ -20,7 +20,6 @@ public static class SignalIdGiver
     public static List<SignalPairing> signalPairs = new List<SignalPairing>();
     public static List<SignalPairing> WaitingForId = new List<SignalPairing>();
 
-
     public static void WaitForId(SignalPairing unit)
     {
         WaitingForId.Add(unit);

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.IO;
 using Assets.Code.Cavas.Shop;
 using UnityEngine;
 
@@ -36,6 +37,7 @@ public class ButtonDoor : MonoBehaviour
 
     void Update()
     {
+
         var target = (open) ? OpenPosition.position : ClosedPosition.position;
         var upgrade = (DoorOpenSpeed)UpgradesManager.Instance.FindRightItem("DoorOpenSpeed");
 

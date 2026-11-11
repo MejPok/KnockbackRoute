@@ -256,16 +256,18 @@ public class RoomGenerator : MonoBehaviour
         if (roomsGenerated >= roomCount && !reachedRoomCount)
         {
             reachedRoomCount = true;
+            GenerateLastRoom();
             GetComponent<WinPlacer>().PlaceWinObject(placer.lastExit.transform);
             corruption.gameObject.SetActive(true);
-            if (assignedIds == false)
-            {
-                SignalIdGiver.StartAssigning();
-                assignedIds = true;
-                Debug.Log("Assigning signal ids");
-            }
-            GenerateLastRoom();
+
+            
             mapLoadUI.SetActive(false);
+
+        } else if (assignedIds == false && reachedRoomCount)
+        {
+            assignedIds = true;
+            SignalIdGiver.StartAssigning();
+            Debug.Log("Assigning signal ids");
         }
     }
 
