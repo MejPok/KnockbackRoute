@@ -11,21 +11,24 @@ public class SignalPairing : MonoBehaviour
 
     public bool waitingForId = false;
 
-    void Update()
+    private void OnEnable()
     {
-        if (!waitingForId && assignedId == -1)
-        {
-            GetSignalId();
-            SignalManager.NewSignalTriggered += OnInvoked;
+        SignalManager.NewSignalTriggered += OnInvoked;
 
-        }
-        
+        if (assignedId == -1)
+            GetSignalId();
     }
-    public void OnInvoked(string possible,int id)
+
+    private void OnDisable()
     {
-        if(id == assignedId && possible == possibleSignalId)
+        SignalManager.NewSignalTriggered -= OnInvoked;
+    }
+
+    public void OnInvoked(string possible, int id)
+    {
+        if (id == assignedId && possible == possibleSignalId)
         {
-            onInvokeEvents.Invoke();   
+            onInvokeEvents.Invoke();
         }
     }
 
@@ -36,11 +39,13 @@ public class SignalPairing : MonoBehaviour
 
     public void GetSignalId()
     {
+        if (assignedId != -1 || waitingForId) return;
+
         SignalIdGiver.WaitForId(this);
         waitingForId = true;
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         SignalManager.NewSignalTriggered -= OnInvoked;
         SignalIdGiver.WaitingForId.Remove(this);

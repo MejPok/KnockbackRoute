@@ -21,5 +21,5 @@ MonoBehaviour:
   itemLevel: 0
   maxItemLevel: 10
   increasePricePerLevel: 200
-  MoneyGainIncreasePercentage: 1.2
+  MoneyGainIncreasePercentage: 1.1
   IncreasePercentagePerlevel: 0.1

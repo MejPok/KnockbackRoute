@@ -18,7 +18,7 @@ public class ButtonDoor : MonoBehaviour
 
     public void OpenDoor()
     {
-        if (OpenPosition == null || ClosedPosition == null)
+        if (OpenPosition == null)
         {
             return;
         }
@@ -32,12 +32,13 @@ public class ButtonDoor : MonoBehaviour
         {
             return;
         }
+
         open = false;
     }
 
     void Update()
     {
-
+        
         var target = (open) ? OpenPosition.position : ClosedPosition.position;
         var upgrade = (DoorOpenSpeed)UpgradesManager.Instance.FindRightItem("DoorOpenSpeed");
 

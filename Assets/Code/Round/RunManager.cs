@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -58,7 +59,7 @@ namespace Assets.Code.Round
 
                 var option = new RunOption
                 {
-                    Difficulty = random.Next(0, NumberOfCompletedRuns + 1),
+                    Difficulty = Math.Min( random.Next(0, NumberOfCompletedRuns + 1), 4),
                     RoomCount = random.Next((NumberOfCompletedRuns + 1) * 5, (NumberOfCompletedRuns + 1) * 15)
                 };
 
