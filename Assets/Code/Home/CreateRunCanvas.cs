@@ -32,6 +32,8 @@ namespace Assets.Code.Home
 
             runCreator.Difficulty = RunManager.Instance.runOptions[runNumber].Difficulty;
             runCreator.NumberOfRooms = RunManager.Instance.runOptions[runNumber].Difficulty;
+            
+            RunManager.Instance.ChosenOption = runNumber;
             runCreator.CreateRunSetup();
 
         }
